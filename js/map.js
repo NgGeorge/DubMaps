@@ -66,10 +66,20 @@ function drawCircles(circleLayer) {
 // Load shit from button press
 $(function() {
   $('.btn--populations').on('click', function() {
-    $('.population-controls').animate({
-      'bottom': '0'
-    })
-    renderMap()
+    var $controls = $('.population-controls')
+    if ( $controls.css('bottom') !== '0px' ) {
+      $controls.animate({
+        'bottom': '0'
+      })
+      renderMap()
+    } else {
+      $controls.animate({
+        'bottom': '-100%'
+      })
+      map.removeLayer(populationLayer)
+      circleLayer.addTo(map)
+    }
+
   })
 })
 
