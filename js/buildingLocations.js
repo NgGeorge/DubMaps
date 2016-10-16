@@ -37,7 +37,7 @@ var buildingLocations = [ { name: 'HUT', lat: '47.659636', long: '-122.306680' }
   { name: 'GUG', lat: '47.654243', long: '-122.306327' },
   { name: 'MKZ', lat: '47.658706', long: '-122.307312' },
   { name: 'CLK', lat: '47.654243', long: '-122.306329' },
-  { name: 'CSH', lat: '47.654243', long: '-122.306330' },
+  { name: 'CSH', lat: '47.653006', long: '-122.299792' },
   { name: 'HSA', lat: '47.650257', long: '-122.308060' },
   { name: 'AND', lat: '47.651731', long: '-122.307580' },
   { name: 'PAA', lat: '47.652984', long: '-122.311022' },
