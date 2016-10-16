@@ -1,5 +1,3 @@
-
-
 var drawMap = function() {
 	L.mapbox.accessToken = 'pk.eyJ1IjoiZ25nY3AiLCJhIjoiY2lsNXd5b3ZrMDA0a3UybHoxY3h5NGN3eiJ9.OrXfMbZ123f3f1EfPRCHHA';
 	var southWest = L.latLng(47.647252, -122.324270),
@@ -13,16 +11,13 @@ var drawMap = function() {
 	  minZoom: 16,
 	}).setView([47.653800, -122.307851], 17);
 
-  for (i = 0; i < buildingLocations.length; i++) {
-    var circle = L.circleMarker([buildingLocations[i].lat, buildingLocations[i].long]).addTo(map);
-    circle.setRadius('20');
-    circle.on('click', function(){$('#myModal').modal()});
-  }
+  drawOverlayTiles(map);
 
-  overlayTiles(map);
+  var circleLayer = L.featureGroup().addTo(map);
+  drawCircles(map, circleLayer);
 }
 
-function overlayTiles(map) {
+function drawOverlayTiles(map) {
   var filename = 22873;
 
   var dy = -0.003650;
@@ -47,5 +42,14 @@ function overlayTiles(map) {
     x1 = x2 + dx;
     y1 += dy;
     y2 += dy;
+  }
+}
+
+function drawCircles(map, circleLayer) {
+  for (i = 0; i < buildingLocations.length; i++) {
+    var circle = L.circleMarker([buildingLocations[i].lat, buildingLocations[i].long]);
+    circle.setRadius(20);
+    circle.on('click', function(){$('#myModal').modal()});
+    circle.addTo(circleLayer);
   }
 }

@@ -18,10 +18,11 @@ g path {
 	stroke: #FFD700;
 	stroke-width: 5;
 	z-index: 2 !important;
+	transition: all .3s ease;
 }
 
 g path:hover {
-	stroke-opacity: 1;
+	stroke-opacity: .8;
 	stroke-width: 10;
 }
 
