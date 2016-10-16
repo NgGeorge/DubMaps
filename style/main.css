@@ -8,6 +8,23 @@ html, body {
 	overflow: hidden;
 }
 
+g {
+	z-index: 2 !important;
+}
+
+g path {
+	fill-opacity: 0;
+	stroke-opacity: 0.5;
+	stroke: #FFD700;
+	stroke-width: 5;
+	z-index: 2 !important;
+}
+
+g path:hover {
+	stroke-opacity: 1;
+	stroke-width: 10;
+}
+
 #map {
 	height: calc(100% - 85px);
 }
@@ -68,6 +85,10 @@ html, body {
 
 .leaflet-bottom.leaflet-right {
 	z-index: 1;
+}
+
+.leaflet-image-layer {
+	z-index: 1 !important;
 }
 
 
