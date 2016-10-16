@@ -82,7 +82,7 @@ button {
 
 
 #UWsignature {
-	height: 40px;	
+	height: 40px;
 	margin-right: 20px;
 	padding-bottom: 5px;
 	vertical-align: middle;
@@ -95,7 +95,7 @@ button {
 .btn.btn-primary {
 	border-radius: 0;
 	letter-spacing: 2px;
-	width: 33.5%;		
+	width: 33.5%;
 }
 
 .leaflet-bottom.leaflet-right {
@@ -104,6 +104,10 @@ button {
 
 .leaflet-image-layer {
 	z-index: 1 !important;
+}
+
+.leaflet-popup {
+  display: none !important;
 }
 
 
