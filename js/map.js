@@ -9,12 +9,17 @@ var drawMap = function() {
 	bounds = L.latLngBounds(southWest, northEast);
 	var map = L.mapbox.map('map', 'gngcp.p97o5d8j', {
 		maxBounds: bounds,
-	    	maxZoom: 18,
-	    	minZoom: 16,
+	  maxZoom: 18,
+	  minZoom: 16,
 	}).setView([47.653800, -122.307851], 17);
 	var layer = L.mapbox.tileLayer('gngcp.p97o5d8j');
 	layer.on('ready', function(){
 	});
+
+  for (i = 0; i < buildingLocations.length; i++) {
+    var circle = L.circleMarker([buildingLocations[i].lat, buildingLocations[i].long]).addTo(map);
+    circle.setRadius('20');
+  }
 
   overlayTiles(map);
 }
