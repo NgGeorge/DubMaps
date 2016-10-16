@@ -110,12 +110,11 @@ function renderMap() {
   populationLayer = new L.LayerGroup([]);
   for (var i = 0; i < buildingLocations.length; i++) {
     var name = buildingLocations[i].name
-    var circle = L.circleMarker([buildingLocations[i].lat, buildingLocations[i].long])
-    circle.setRadius(Math.log(chart[name].n)/maxStudentsLog * 100);
-    circle.options.color = chart[name].color
-    circle.options.fillOpacity = .75
-    console.log(circle.options)
-    circle.addTo(populationLayer)
+    var populationMarker = L.circleMarker([buildingLocations[i].lat, buildingLocations[i].long])
+    populationMarker.setRadius(Math.log(chart[name].n)/maxStudentsLog * 100);
+    populationMarker.options.color = chart[name].color
+    populationMarker.options.fillOpacity = .75
+    populationMarker.addTo(populationLayer)
   }
   populationLayer.addTo(map);
 }

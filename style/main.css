@@ -147,8 +147,7 @@ button {
 	z-index: 99;
 }
 
-.population-controls input,
-.population-controls select {
+.population-controls .box {
 	width: 45%;
 	display: inline-block;
 }
