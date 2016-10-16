@@ -78,6 +78,7 @@ var time
   , chart = {}
   , colors = ["#9e0142","#d53e4f","#f46d43","#fdae61","#fee08b","#ffffbf","#e6f598","#abdda4","#66c2a5","#3288bd","#5e4fa2"].reverse()
   , colorsLen = colors.length
+  , populationLayer
 
 function renderMap() {
   $('.map').html('')
@@ -97,28 +98,24 @@ function renderMap() {
     return info.n
   }))
   maxStudents++
+  var maxStudentsLog = Math.log(maxStudents)
 
   $.each(chart, function(name, info) {
-    chart[name].color = colors[Math.floor(info.n/maxStudents*colorsLen)]
+    chart[name].color = colors[Math.floor(Math.log(info.n)/maxStudentsLog*colorsLen)]
   })
 
-  var i = 0;
-  map.eachLayer(function(layer) {
-    if ( i > 0 ) {
-      map.removeLayer(layer)
-      i++;
-    }
-  })
+  circleLayer && map.removeLayer(circleLayer)
+  populationLayer && map.removeLayer(populationLayer)
 
-  var layer = new L.LayerGroup([]);
+  populationLayer = new L.LayerGroup([]);
   for (var i = 0; i < buildingLocations.length; i++) {
     var name = buildingLocations[i].name
     var circle = L.circleMarker([buildingLocations[i].lat, buildingLocations[i].long])
-    circle.setRadius(chart[name].n/maxStudents * 100);
+    circle.setRadius(Math.log(chart[name].n)/maxStudentsLog * 100);
     circle.options.color = chart[name].color
-    circle.addTo(layer)
+    circle.addTo(populationLayer)
   }
-  layer.addTo(map);
+  populationLayer.addTo(map);
 }
 
 $('.population-controls .time').on('change', function() {
