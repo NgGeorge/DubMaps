@@ -18,10 +18,12 @@
 
   // Hides circles so that they don't drift on zoom
   map.on('zoomstart', function(e) {
+    console.log("Zoom start!");
     map.removeLayer(circleLayer);
   });
 
   map.on('zoomend', function(e) {
+    console.log("Zoom end!");
     map.addLayer(circleLayer);
   });
 //}
@@ -57,11 +59,21 @@ function drawOverlayTiles() {
 function drawCircles(circleLayer) {
   for (i = 0; i < buildingLocations.length; i++) {
     var circle = L.circleMarker([buildingLocations[i].lat, buildingLocations[i].long]);
+    var name = buildingLocations[i].name;
     circle.setRadius(20);
-    circle.on('click', function(){$('#myModal').modal()});
+    circle.bindPopup(name);
+    circle.on('click', function(){
+      $('#myModal').modal();
+      $('.modal-title').empty();
+      console.log(this._popup._content);
+      $("<p>" + this._popup._content + "</p>").appendTo('.modal-title');
+    });
+
     circle.addTo(circleLayer);
   }
 }
+
+
 
 // Load shit from button press
 $(function() {
