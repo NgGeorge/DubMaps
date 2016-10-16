@@ -280,3 +280,60 @@ function getColor (i) {
 
   return colors[i % colors.length]
 }
+
+// Ordered Chart (Horizontal Bar)
+function renderOrderedChart() {
+  var ctx = $('#ordered-population-chart');
+  var data = [];
+
+  for ( var buildingName in buildingsStudentData ) {
+    if (  !buildingsStudentData.hasOwnProperty(buildingName) ) continue;
+    var building = buildingsStudentData[buildingName];
+    var day = 'Monday'
+    var today = buildingsStudentData[buildingName][day]
+    console.log(today)
+    var current;
+    today.forEach(function(section) {
+      if ( section.time == 1200 ) {
+        current = section;
+      }
+    })
+    data.push({
+      num: current.numStudents,
+      building: buildingName
+    })
+  }
+
+  data = data.sort(function(a, b) {
+    return a.num > b.num ? -1: 1;
+  }).splice(0, 10)
+
+  var j = 42
+  new Chart(ctx, {
+    type: 'horizontalBar',
+    data: {
+      labels: data.map(function(el) { return el.building }),
+      datasets: [
+        {
+          label: 'Building',
+          backgroundColor: 'rgba('+ getColor(j) +'.6)',
+          hoverBackgroundColor: 'rgba('+ getColor(j) +'.8)',
+          data: data.map(function(el) {
+            return el.num
+          })
+        }
+      ]
+    },
+    options:{
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+          }
+        }]
+      }
+    }
+  })
+}
+
+renderOrderedChart()
