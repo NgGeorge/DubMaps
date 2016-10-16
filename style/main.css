@@ -302,3 +302,18 @@ label.btn-upload {
 	background-color: #000000;
 	border: 2px solid #555555;
 }
+
+.file-handler {
+	position: fixed;
+	top: 76px;
+	background: rgba(255, 255, 255, .6);
+	padding: 10px;
+	text-align: center;
+	z-index: 999;
+	right: 0;
+	left: 0;
+}
+
+.file-handler input {
+	margin: 0 auto;
+}

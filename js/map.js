@@ -1,7 +1,3 @@
-var map;
-
-//var drawMap = function() {
-
 L.mapbox.accessToken = 'pk.eyJ1IjoiZ25nY3AiLCJhIjoiY2lsNXd5b3ZrMDA0a3UybHoxY3h5NGN3eiJ9.OrXfMbZ123f3f1EfPRCHHA';
 var southWest = L.latLng(47.647252, -122.324270),
     northEast = L.latLng(47.661635, -122.288589),
@@ -617,4 +613,4 @@ function previewFile() {
   }
 }
 
-$('input[type="file"]').on('change', previewFile)
+$('input[type="file"]').unbind().off().on('change', previewFile)
