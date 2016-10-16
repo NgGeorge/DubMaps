@@ -1,23 +1,26 @@
 var map; 
 
 //var drawMap = function() {
-	L.mapbox.accessToken = 'pk.eyJ1IjoiZ25nY3AiLCJhIjoiY2lsNXd5b3ZrMDA0a3UybHoxY3h5NGN3eiJ9.OrXfMbZ123f3f1EfPRCHHA';
-	var southWest = L.latLng(47.647252, -122.324270),
-	    northEast = L.latLng(47.661635, -122.288589),
-	    bounds = L.latLngBounds(southWest, northEast);
 
-	bounds = L.latLngBounds(southWest, northEast);
-	map = L.mapbox.map('map', 'gngcp.p97o5d8j', {
-		maxBounds: bounds,
-	  maxZoom: 18,
-	  minZoom: 16,
-	}).setView([47.653800, -122.307851], 17);
+L.mapbox.accessToken = 'pk.eyJ1IjoiZ25nY3AiLCJhIjoiY2lsNXd5b3ZrMDA0a3UybHoxY3h5NGN3eiJ9.OrXfMbZ123f3f1EfPRCHHA';
+var southWest = L.latLng(47.647252, -122.324270),
+    northEast = L.latLng(47.661635, -122.288589),
+    bounds = L.latLngBounds(southWest, northEast);
 
-  drawOverlayTiles(map);
+bounds = L.latLngBounds(southWest, northEast);
+var map = L.mapbox.map('map', 'gngcp.p97o5d8j', {
+	maxBounds: bounds,
+  maxZoom: 18,
+  minZoom: 16,
+}).setView([47.653800, -122.307851], 17);
 
-  var circleLayer = L.layerGroup().addTo(map);
-  drawCircles(circleLayer);
-  resetCircles();
+drawOverlayTiles(map);
+
+var circleLayer = L.layerGroup().addTo(map);
+drawCircles(circleLayer);
+resetCircles();
+
+var populationView = false;
 
 function drawOverlayTiles() {
   var filename = 22873;
@@ -115,8 +118,9 @@ function drawCircles(circleLayer) {
     circle.bindPopup(content);
     circle.options.className = 'buildingMark';
     circle.on('click', function(){
-      toggleCircleModal(this);
       map.panTo(this._latlng);
+      resetCircles();
+      toggleCircleModal(this);
     });
     circle.addTo(circleLayer);
   }
@@ -218,9 +222,9 @@ $("#search").on('keyup', function (e) {
     var entry = $("#search").val();
     var search = fuse.search(entry).map(function(thing) {
         return thing.building;
+    }).filter(function(building) {
+        return building.length == 3
     }).splice(0, 5)
-
-    console.log(search);
 
     resetCircles();
 
@@ -236,8 +240,6 @@ $("#search").on('keyup', function (e) {
     } else {
       circles = null;
     }
-
-    console.log(circles);
 
     if(circles != null) {
       if(circles.length > 1) {
@@ -266,8 +268,9 @@ $(function() {
       $controls.animate({
         'bottom': '-100%'
       })
-      map.removeLayer(populationLayer)
-      circleLayer.addTo(map)
+      //map.removeLayer(populationLayer)
+      //circleLayer.addTo(map)
+      resetCircles();
     }
   })
 })
@@ -303,20 +306,15 @@ function renderMap() {
     chart[name].color = colors[Math.floor(Math.log(info.n)/maxStudentsLog*colorsLen)];
   })
 
-  circleLayer && map.removeLayer(circleLayer);
-  populationLayer && map.removeLayer(populationLayer);
+  var circles = circleLayer.getLayers();
 
-  populationLayer = new L.LayerGroup([]);
-  for (var i = 0; i < buildingLocations.length; i++) {
-    var name = buildingLocations[i].name;
-    var populationMarker = L.circleMarker([buildingLocations[i].lat, buildingLocations[i].long]);
-    populationMarker.setRadius(Math.log(chart[name].n)/maxStudentsLog * 50);
-    populationMarker.options.color = chart[name].color;
-    populationMarker.options.fillOpacity = .75;
-    populationMarker.options.className = "popMark";
-    populationMarker.addTo(populationLayer)
+  resetCircles();
+  for(var i = 0; i < circles.length; i++) {
+    var name = getCircleTitle(circles[i]);
+    circles[i].setRadius(Math.log(chart[name].n)/maxStudentsLog * 100);
+    circles[i].setStyle({color: chart[name].color, fillOpacity: .75});
+    circles[i].options.className = "popMark";
   }
-  populationLayer.addTo(map);
 }
 
 $('.population-controls .time').on('change', function() {
@@ -441,3 +439,40 @@ window.onload = function(e) {
 		$('#time').html(hour + ':' + minutes);	
 	});
 }
+
+// Get current and upcoming classes 
+function getClasses(building) {
+  var now = new Date()
+    , day = 'Monday'
+    , hour = ('00' + now.getHours()).substr(now.getHours().toString().length)
+    , minute = ('00' + now.getMinutes()).substr(now.getMinutes().toString().length)
+    , time = hour + minute
+    , hourFuture = parseFloat(hour)+3
+    , timeFuture = ('00' + hourFuture).substr(hourFuture.toString().length) + minute
+
+  building = building || 'MGH'
+
+  var data = {
+    current: mainData.filter(function(el) {
+      return ( 
+        el.building == building &&
+        parseFloat(el.time[0]) <= time &&
+        parseFloat(el.time[1]) >= time &&
+        el.days.indexOf(day) >= 0
+      )
+    }).splice(0, 5),
+
+    upcoming: mainData.filter(function(el) {
+      return ( 
+        el.building == building &&
+        parseFloat(el.time[0]) <= hourFuture &&
+        parseFloat(el.time[1]) >= hourFuture &&
+        el.days.indexOf(day) >= 0
+      )
+    }).splice(0, 5)
+  }
+
+  return data
+}
+
+console.log(getClasses())
