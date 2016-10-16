@@ -1,32 +1,33 @@
 //var drawMap = function() {
-	L.mapbox.accessToken = 'pk.eyJ1IjoiZ25nY3AiLCJhIjoiY2lsNXd5b3ZrMDA0a3UybHoxY3h5NGN3eiJ9.OrXfMbZ123f3f1EfPRCHHA';
-	var southWest = L.latLng(47.647252, -122.324270),
-	    northEast = L.latLng(47.661635, -122.288589),
-	    bounds = L.latLngBounds(southWest, northEast);
+L.mapbox.accessToken = 'pk.eyJ1IjoiZ25nY3AiLCJhIjoiY2lsNXd5b3ZrMDA0a3UybHoxY3h5NGN3eiJ9.OrXfMbZ123f3f1EfPRCHHA';
+var southWest = L.latLng(47.647252, -122.324270),
+    northEast = L.latLng(47.661635, -122.288589),
+    bounds = L.latLngBounds(southWest, northEast);
 
-	bounds = L.latLngBounds(southWest, northEast);
-	var map = L.mapbox.map('map', 'gngcp.p97o5d8j', {
-		maxBounds: bounds,
-	  maxZoom: 18,
-	  minZoom: 16,
-	}).setView([47.653800, -122.307851], 17);
+bounds = L.latLngBounds(southWest, northEast);
+var map = L.mapbox.map('map', 'gngcp.p97o5d8j', {
+	maxBounds: bounds,
+  maxZoom: 18,
+  minZoom: 16,
+}).setView([47.653800, -122.307851], 17);
 
-  drawOverlayTiles(map);
+drawOverlayTiles(map);
 
-  var circleLayer = L.layerGroup().addTo(map);
-  drawCircles(circleLayer);
-  resetCircles();
+var circleLayer = L.layerGroup().addTo(map);
+drawCircles(circleLayer);
+resetCircles();
 
-  // Hides circles so that they don't drift on zoom
-  map.on('zoomstart', function(e) {
-    console.log("Zoom start!");
-    map.removeLayer(circleLayer);
-  });
+var populationView = false;
+// Hides circles so that they don't drift on zoom
+map.on('zoomstart', function(e) {
+  console.log("Zoom start!");
+  map.removeLayer(circleLayer);
+});
 
-  map.on('zoomend', function(e) {
-    console.log("Zoom end!");
-    map.addLayer(circleLayer);
-  });
+map.on('zoomend', function(e) {
+  console.log("Zoom end!");
+  map.addLayer(circleLayer);
+});
 //}
 
 function drawOverlayTiles() {
@@ -124,8 +125,9 @@ function drawCircles(circleLayer) {
     circle.setRadius(20);
     circle.bindPopup(content);
     circle.on('click', function(){
-      toggleCircleModal(this);
       map.panTo(this._latlng);
+      resetCircles();
+      toggleCircleModal(this);
     });
     circle.addTo(circleLayer);
   }
@@ -275,8 +277,9 @@ $(function() {
       $controls.animate({
         'bottom': '-100%'
       })
-      map.removeLayer(populationLayer)
-      circleLayer.addTo(map)
+      //map.removeLayer(populationLayer)
+      //circleLayer.addTo(map)
+      resetCircles();
     }
   })
 })
@@ -312,19 +315,14 @@ function renderMap() {
     chart[name].color = colors[Math.floor(Math.log(info.n)/maxStudentsLog*colorsLen)]
   })
 
-  circleLayer && map.removeLayer(circleLayer)
-  populationLayer && map.removeLayer(populationLayer)
+  var circles = circleLayer.getLayers();
 
-  populationLayer = new L.LayerGroup([]);
-  for (var i = 0; i < buildingLocations.length; i++) {
-    var name = buildingLocations[i].name
-    var populationMarker = L.circleMarker([buildingLocations[i].lat, buildingLocations[i].long])
-    populationMarker.setRadius(Math.log(chart[name].n)/maxStudentsLog * 100);
-    populationMarker.options.color = chart[name].color
-    populationMarker.options.fillOpacity = .75
-    populationMarker.addTo(populationLayer)
+  resetCircles();
+  for(var i = 0; i < circles.length; i++) {
+    var name = getCircleTitle(circles[i]);
+    circles[i].setRadius(Math.log(chart[name].n)/maxStudentsLog * 100);
+    circles[i].setStyle({color: chart[name].color, fillOpacity: .75});
   }
-  populationLayer.addTo(map);
 }
 
 $('.population-controls .time').on('change', function() {
