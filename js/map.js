@@ -148,7 +148,7 @@ function toggleCircleModal(circle) {
   var myTitle = getCircleTitle(circle);
   var myBody = getCircleBody(circle);
 
-  $('.modal-title').html(myTitle + ' Insights');
+  $('.modal-title').html(buildingCodes.get(getCircleTitle(circle)) + ' (' + getCircleTitle(circle) + ') Insights');
   var ctx1 = document.createElement('canvas');
   var ctx2 = document.createElement('canvas');
   $('.modal-body').append(ctx1);
@@ -536,4 +536,12 @@ function getClasses(building) {
   return data
 }
 
+function getEvents(building) {
+  building = building || 'MGH'
+  return eventsData.filter(function(event) {
+    return event.location == building
+  })
+}
+
 console.log(getClasses())
+console.log(getEvents())

@@ -1,83 +1,85 @@
-var code = new Map();
+var buildingCodesArr = [
+["ACC", "Academic Computing Center"],
+["ALD", "Alder Hall"],
+["AND", "Anderson Hall"],
+["ARC", "Architecture Hall"],
+["ART", "Art Building"],
+["ATG", "Atmospheric Science and Geophysics Building"],
+["BAG", "Bagley Hall"],
+["BLD", "Bloedel Hall"],
+["BMM", "Burke Memorial Museum"],
+["BNS", "Benson Hall"],
+["CDH", "Condon Hall"],
+["CHB", "Chemistry Building"],
+["CHL", "Chemistry Library"],
+["CLK", "Clark Hall"],
+["CMA", "Ceramic and Metal Arts Facility"],
+["CMU", "Communications Building"],
+["CSE", "Computer Science and Engineering"],
+["CSH", "Conibear Shellhouse"],
+["DEM", "Dempsey Hall"],
+["DEN", "Denny Hall"],
+["DRC", "Douglas Research Conservatory"],
+["EEB", "Electrical Engineering Building"],
+["EGL", "Eagleson Hall"],
+["FSH", "Fishery Sciences Building"],
+["FTR", "Fisheries Teaching and Research Center"],
+["GA1", "Guthrie Annex 1"],
+["GLD", "Gould Hall"],
+["GTH", "Guthrie Hall"],
+["GUG", "Guggenheim Hall"],
+["GWN", "Gowen Hall"],
+["HCK", "Hitchcock Hall"],
+["HHL", "Harris Hydraulics"],
+["HPT", "Hughes Penthouse Theatre"],
+["HSA", "Health Sciences A-wing"],
+["HSB", "Health Sciences B-wing"],
+["HSD", "Health Sciences D-wing"],
+["HSE", "Health Sciences E-wing"],
+["HSH", "Health Sciences H-wing"],
+["HSI", "Health Sciences I-wing"],
+["HSJ", "Health Sciences J-wing"],
+["HSK", "Health Sciences K-wing"],
+["HSR", "Health Sciences R-wing"],
+["HST", "Health Sciences T-wing"],
+["HUT", "Hutchinson Hall"],
+["ICT", "Instructional Center/Theatre"],
+["JHN", "Johnson Hall"],
+["KIN", "Kincaid Hall"],
+["KNE", "Kane Hall"],
+["LAW", "William Gates Hall"],
+["LEW", "Lewis Hall"],
+["LOW", "Loew Hall"],
+["MAH", "Maple Hall"],
+["MAR", "Marine Studies Building"],
+["MEB", "Mechanical Engineering Building"],
+["MGH", "Mary Gates Hall"],
+["MKZ", "Mackenzie Hall"],
+["MLR", "Miller Hall"],
+["MNY", "Meany Hall"],
+["MOR", "More Hall"],
+["MSB", "Marine Sciences Building"],
+["MUE", "Mueller Hall"],
+["MUS", "Music Building"],
+["NPL", "North Physics Lab"],
+["OBS", "Jacobsen Observatory"],
+["OCE", "Oceanography Building"],
+["OCN", "Ocean Sciences Building"],
+["OTB", "Oceanography Teaching Building"],
+["OUG", "Odegaard Undergraduate Library"],
+["PAA", "Physics/Astronomy Auditorium"],
+["PAB", "Physics/Astronomy Bar"],
+["PAR", "Parrington Hall"],
+["PAT", "Physics/Astronomy Tower"],
+["PDL", "Padelford Hall"],
+["RAI", "Raitt Hall"],
+["SAV", "Savery Hall"],
+["SIG", "Sieg Hall"],
+["SMI", "Smith Hall"],
+["SWS", "Social Work/Speech and Hearing Sciences Building"],
+["THO", "Thomson Hall"],
+["UMC", "University Medical Center CC Wing"],
+["WFS", "Winkenwerder Forest Science Lab"]
+]
 
-code.set("ACC", "Academic Computing Center");
-code.set("ALD", "Alder Hall");
-code.set("AND", "Anderson Hall");
-code.set("ARC", "Architecture Hall");
-code.set("ART", "Art Building");
-code.set("ATG", "Atmospheric Science and Geophysics Building");
-code.set("BAG", "Bagley Hall");
-code.set("BLD", "Bloedel Hall");
-code.set("BMM", "Burke Memorial Museum");
-code.set("BNS", "Benson Hall");
-code.set("CDH", "Condon Hall");
-code.set("CHB", "Chemistry Building");
-code.set("CHL", "Chemistry Library");
-code.set("CLK", "Clark Hall");
-code.set("CMA", "Ceramic and Metal Arts Facility");
-code.set("CMU", "Communications Building");
-code.set("CSE", "Computer Science and Engineering");
-code.set("CSH", "Conibear Shellhouse");
-code.set("DEM", "Dempsey Hall");
-code.set("DEN", "Denny Hall");
-code.set("DRC", "Douglas Research Conservatory");
-code.set("EEB", "Electrical Engineering Building");
-code.set("EGL", "Eagleson Hall");
-code.set("FSH", "Fishery Sciences Building");
-code.set("FTR", "Fisheries Teaching and Research Center");
-code.set("GA1", "Guthrie Annex 1");
-code.set("GLD", "Gould Hall");
-code.set("GTH", "Guthrie Hall");
-code.set("GUG", "Guggenheim Hall");
-code.set("GWN", "Gowen Hall");
-code.set("HCK", "Hitchcock Hall");
-code.set("HHL", "Harris Hydraulics");
-code.set("HPT", "Hughes Penthouse Theatre");
-code.set("HSA", "Health Sciences A-wing");
-code.set("HSB", "Health Sciences B-wing");
-code.set("HSD", "Health Sciences D-wing");
-code.set("HSE", "Health Sciences E-wing");
-code.set("HSH", "Health Sciences H-wing");
-code.set("HSI", "Health Sciences I-wing");
-code.set("HSJ", "Health Sciences J-wing");
-code.set("HSK", "Health Sciences K-wing");
-code.set("HSR", "Health Sciences R-wing");
-code.set("HST", "Health Sciences T-wing");
-code.set("HUT", "Hutchinson Hall");
-code.set("ICT", "Instructional Center/Theatre");
-code.set("JHN", "Johnson Hall");
-code.set("KIN", "Kincaid Hall");
-code.set("KNE", "Kane Hall");
-code.set("LAW", "William Gates Hall");
-code.set("LEW", "Lewis Hall");
-code.set("LOW", "Loew Hall");
-code.set("MAH", "Maple Hall");
-code.set("MAR", "Marine Studies Building");
-code.set("MEB", "Mechanical Engineering Building");
-code.set("MGH", "Mary Gates Hall");
-code.set("MKZ", "Mackenzie Hall");
-code.set("MLR", "Miller Hall");
-code.set("MNY", "Meany Hall");
-code.set("MOR", "More Hall");
-code.set("MSB", "Marine Sciences Building");
-code.set("MUE", "Mueller Hall");
-code.set("MUS", "Music Building");
-code.set("NPL", "North Physics Lab");
-code.set("OBS", "Jacobsen Observatory");
-code.set("OCE", "Oceanography Building");
-code.set("OCN", "Ocean Sciences Building");
-code.set("OTB", "Oceanography Teaching Building");
-code.set("OUG", "Odegaard Undergraduate Library");
-code.set("PAA", "Physics/Astronomy Auditorium");
-code.set("PAB", "Physics/Astronomy Bar");
-code.set("PAR", "Parrington Hall");
-code.set("PAT", "Physics/Astronomy Tower");
-code.set("PDL", "Padelford Hall");
-code.set("RAI", "Raitt Hall");
-code.set("SAV", "Savery Hall");
-code.set("SIG", "Sieg Hall");
-code.set("SMI", "Smith Hall");
-code.set("SWS", "Social Work/Speech and Hearing Sciences Building");
-code.set("THO", "Thomson Hall");
-code.set("UMC", "University Medical Center CC Wing");
-code.set("WFS", "Winkenwerder Forest Science Lab");
+var buildingCodes = new Map(buildingCodesArr);
