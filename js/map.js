@@ -10,14 +10,12 @@ var map = L.mapbox.map('map', 'gngcp.p97o5d8j', {
   minZoom: 16,
 }).setView([47.653800, -122.307851], 17);
 
-for (i = 0; i < buildingLocations.length; i++) {
-  var circle = L.circleMarker([buildingLocations[i].lat, buildingLocations[i].long]).addTo(map);
-  circle.setRadius(20);
-}
+drawOverlayTiles();
 
-overlayTiles(map);
+var circleLayer = L.featureGroup().addTo(map);
+drawCircles(circleLayer);
 
-function overlayTiles(map) {
+function drawOverlayTiles() {
   var filename = 22873;
 
   var dy = -0.003650;
@@ -44,6 +42,16 @@ function overlayTiles(map) {
     y2 += dy;
   }
 }
+
+function drawCircles(circleLayer) {
+  for (i = 0; i < buildingLocations.length; i++) {
+    var circle = L.circleMarker([buildingLocations[i].lat, buildingLocations[i].long]);
+    circle.setRadius(20);
+    circle.on('click', function(){$('#myModal').modal()});
+    circle.addTo(circleLayer);
+  }
+}
+
 
 // Load shit from button press
 $(function() {
