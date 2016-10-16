@@ -152,19 +152,25 @@ function toggleCircleModal(circle) {
   var ctx2 = document.createElement('canvas');
   var currentClasses = document.createElement('div');
   var cClasses = getClasses(myTitle);
-  $('.modal-body').append('<h1 id="currentTitle"> Current Classes </h1>');
-  for (i = 0; i < cClasses.current.length; i++) {
-  	$(currentClasses).append('<h2 class="scheduledClass">' + cClasses.current[i].code + ' ' + cClasses.current[i].room + ' @ ' + cClasses.current[i].time[0] + ' to ' + cClasses.current[i].time[1] + '</h2>'); 	
+  if ( cClasses.current.length ) {
+    $('.modal-body').append('<h1 id="currentTitle"> Current Classes </h1>');
+    for (i = 0; i < cClasses.current.length; i++) {
+    	$(currentClasses).append('<h2 class="scheduledClass">' + cClasses.current[i].code + ' ' + cClasses.current[i].room + ' @ ' + cClasses.current[i].time[0] + ' to ' + cClasses.current[i].time[1] + '</h2>');
+    }
+    $('.modal-body').append(currentClasses);
   }
-  $('.modal-body').append(currentClasses);
 
-  var upcomingClasses = document.createElement('div');
-  $('.modal-body').append('<h1 id="upcomingTitle"> Upcoming Classes </h1>');
-  for (i = 0; i < cClasses.upcoming.length; i++) {
-  	$(upcomingClasses).append('<h2 class="scheduledClass">' + cClasses.upcoming[i].code + ' ' + cClasses.upcoming[i].room + ' @ ' + cClasses.upcoming[i].time[0] + ' to ' + cClasses.upcoming[i].time[1] + '</h2>'); 	
+  if ( cClasses.upcoming.length ) {
+    var upcomingClasses = document.createElement('div');
+    $('.modal-body').append('<h1 id="upcomingTitle"> Upcoming Classes </h1>');
+    for (i = 0; i < cClasses.upcoming.length; i++) {
+    	$(upcomingClasses).append('<h2 class="scheduledClass">' + cClasses.upcoming[i].code + ' ' + cClasses.upcoming[i].room + ' @ ' + cClasses.upcoming[i].time[0] + ' to ' + cClasses.upcoming[i].time[1] + '</h2>');
+    }
+    $('.modal-body').append(upcomingClasses);
   }
-  $('.modal-body').append(upcomingClasses);
 
+  ctx1.style.marginTop = "10px"
+  ctx2.style.marginTop = "10px"
   $('.modal-body').append(ctx1);
   getStudentChart(myTitle, ctx1)
   $('.modal-body').append(ctx2);
@@ -465,6 +471,16 @@ window.onload = function(e) {
     map.doubleClickZoom.enable();
     map.scrollWheelZoom.enable();
 	});
+  $('div #myModal').on('mouseover', function() {
+		map.dragging.disable();
+    map.doubleClickZoom.disable();
+    map.scrollWheelZoom.disable();
+	});
+	$('div #myModal').on('mouseout', function() {
+		map.dragging.enable();
+    map.doubleClickZoom.enable();
+    map.scrollWheelZoom.enable();
+	});
 	$('#slider').on('change', function() {
 		var hour = Math.floor($('#slider').val() / 100);
 		var minutes;
@@ -500,7 +516,7 @@ function mark_schedule() {
   var circles = [];
   console.log(schedule);
   $.each(schedule, function(day, content) {
-    console.log(content); 
+    console.log(content);
     var courses = content.courses;
     $.each(courses, function(n, course) {
       console.log(course);
@@ -514,9 +530,9 @@ function mark_schedule() {
     })
     console.log(building);
     var circle = findCircle(building);
-    circles.push(circle);  
-    }) 
-    
+    circles.push(circle);
+    })
+
   })
   highlightCircles(circles);
 }
@@ -564,7 +580,4 @@ function getEvents(building) {
     return event.location == building
   })
 }
-
-console.log(getClasses())
-console.log(getEvents())
 
