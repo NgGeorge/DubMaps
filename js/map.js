@@ -65,18 +65,23 @@ function drawCircles(circleLayer) {
     circle.setRadius(20);
     circle.bindPopup(content);
     circle.on('click', function(){
-      $('#myModal').modal();
-      $('.modal-title').empty();
-      $('.modal-body').empty();
-      var myContent = this._popup._content;
-      var myTitle = getCircleTitle(this);
-      var myBody = getCircleBody(this);
-      $(myTitle).appendTo('.modal-title');
-      $(myBody).appendTo('.modal-body');
+      toggleCircleModal(this);
+      map.panTo(this._latlng);
     });
-
     circle.addTo(circleLayer);
   }
+}
+
+function toggleCircleModal(circle) {
+  $('#myModal').modal();
+  $('.modal-title').empty();
+  $('.modal-body').empty();
+  var myContent = circle._popup._content;
+  var myTitle = getCircleTitle(circle);
+  var myBody = getCircleBody(circle);
+  //console.log(circle);
+  $(myTitle).appendTo('.modal-title');
+  $(myBody).appendTo('.modal-body');
 }
 
 function getCircleTitle(circle) {
@@ -90,6 +95,36 @@ function getCircleBody(circle) {
   var myBody = /body: \[(.*?)\]/.exec(myContent)[1];
   return myBody;
 }
+
+// Returns the circle corresponding to a code
+function findCircle(code) {
+  var target;
+  var arr = circleLayer.getLayers();
+
+  for(var i = 0; i < arr.length; i++) {
+    if(getCircleTitle(arr[i]).includes(code)) {
+      return arr[i];
+    }
+  }
+
+  return null;
+}
+
+// Search function
+$("#search").on('keyup', function (e) {
+    if (e.keyCode == 13) {
+        var entry = $("#search").val();
+        var search = entry; // replace with fuse search
+        var code = search;
+        var circle = findCircle(code);
+        if(circle != null) {
+          toggleCircleModal(circle);
+          map.panTo(circle._latlng);
+       } else {
+         console.log(entry + " is not a valid building code.");
+       }
+    }
+});
 
 // Load shit from button press
 $(function() {
