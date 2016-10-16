@@ -14,7 +14,7 @@
   drawOverlayTiles(map);
 
   var circleLayer = L.layerGroup().addTo(map);
-  drawCircles(map, circleLayer);
+  drawCircles(circleLayer);
 
   // Hides circles so that they don't drift on zoom
   map.on('zoomstart', function(e) {
