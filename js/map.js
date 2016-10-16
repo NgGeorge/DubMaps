@@ -15,6 +15,7 @@
 
   var circleLayer = L.layerGroup().addTo(map);
   drawCircles(circleLayer);
+  resetCircles();
 
   // Hides circles so that they don't drift on zoom
   map.on('zoomstart', function(e) {
@@ -186,22 +187,79 @@ var fuse = new Fuse(mainData, {
   ]
 })
 
+function resetCircles() {
+  var circles = circleLayer.getLayers();
+  for(var i = 0; i < circles.length; i++) {
+    circles[i].setStyle({color: '#3388ff', weight: 3, fillOpacity: 0.2});
+    circles[i].setRadius(20);
+  }
+}
+
+function highlightCircles(circles) {
+  var lat = 0;
+  var lng = 0;
+  var total = 0;
+
+  for(var i = 0; i < circles.length; i++) {
+    if(circles[i] != null) {
+      circles[i].setStyle({color: '#EDED11', weight: 7, fillOpacity: 0.4});
+      circles[i].setRadius(30);
+      //console.log(circles[i]);
+      lat += circles[i]._latlng.lat;
+      lng += circles[i]._latlng.lng;
+      total++;
+    } else {
+      console.log("You probably gave me SOCC, which is not a building.");
+    }
+  }
+
+  lat /= total;
+  lng /= total;
+  map.setZoom(16);
+  map.panTo([lat, lng]);
+}
+
 // Search function
 $("#search").on('keyup', function (e) {
-    if (e.keyCode == 13) {
-        var entry = $("#search").val();
-        var search = fuse.search(entry).map(function(thing) {
-            return thing.building;
-        }).splice(0, 5)
-        var code = search;
-        var circle = findCircle(code);
-        if(circle != null) {
-          toggleCircleModal(circle);
-          map.panTo(circle._latlng);
-       } else {
-         console.log(entry + " is not a valid building code.");
-       }
+  if (e.keyCode == 13) {
+    console.log("Enter!");
+    var circles = [];
+    var entry = $("#search").val();
+    var search = fuse.search(entry).map(function(thing) {
+        return thing.building;
+    }).splice(0, 5)
+
+    console.log(search);
+
+    resetCircles();
+
+    if (search.length > 0) {
+      var seen = [];
+      for(var i = 0; i < search.length; i++) {
+        var item = findCircle(search[i])
+        if(!seen.includes(search[i])) {
+          circles.push(item);
+          seen.push(search[i]);
+        }
+      }
+    } else {
+      circles = null;
     }
+
+    console.log(circles);
+
+    if(circles != null) {
+      if(circles.length > 1) {
+        highlightCircles(circles);
+      } else if (circles[0] != null) {
+        toggleCircleModal(circles[0]);
+        map.setZoom(17);
+        map.panTo(circles[0]._latlng);
+      }
+   } else {
+     console.log(entry + " is not a valid building code.");
+   }
+  }
 });
 
 // Load shit from button press
