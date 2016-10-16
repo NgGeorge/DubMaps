@@ -306,7 +306,7 @@ label.btn-upload {
 .file-handler {
 	position: fixed;
 	top: 76px;
-	background: rgba(255, 255, 255, .6);
+	background: rgba(255, 255, 255, .8);
 	padding: 10px;
 	text-align: center;
 	z-index: 999;
