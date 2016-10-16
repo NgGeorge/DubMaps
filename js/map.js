@@ -76,7 +76,7 @@ $(function() {
 var time
   , day
   , chart = {}
-  , colors = ["#9e0142","#d53e4f","#f46d43","#fdae61","#fee08b","#ffffbf","#e6f598","#abdda4","#66c2a5","#3288bd","#5e4fa2"].reverse()
+  , colors = ["#ffffcc","#ffeda0","#fed976","#feb24c","#fd8d3c","#fc4e2a","#e31a1c","#bd0026","#800026"]
   , colorsLen = colors.length
   , populationLayer
 
@@ -113,6 +113,8 @@ function renderMap() {
     var circle = L.circleMarker([buildingLocations[i].lat, buildingLocations[i].long])
     circle.setRadius(Math.log(chart[name].n)/maxStudentsLog * 100);
     circle.options.color = chart[name].color
+    circle.options.fillOpacity = .75
+    console.log(circle.options)
     circle.addTo(populationLayer)
   }
   populationLayer.addTo(map);
