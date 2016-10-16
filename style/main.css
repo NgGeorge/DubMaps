@@ -349,3 +349,9 @@ label.btn-upload {
 	padding: 10px 20px;
 	border: none;
 }
+
+@media (max-width: 40em) {
+	.modal canvas {
+		display: none;
+	}
+}
