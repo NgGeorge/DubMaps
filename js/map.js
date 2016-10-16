@@ -282,9 +282,10 @@ function getColor (i) {
 }
 
 // Ordered Chart (Horizontal Bar)
-function renderOrderedChart() {
+function renderOrderedChart(time) {
   var ctx = $('#ordered-population-chart');
   var data = [];
+  time = time || 1200;
 
   for ( var buildingName in buildingsStudentData ) {
     if (  !buildingsStudentData.hasOwnProperty(buildingName) ) continue;
@@ -294,32 +295,40 @@ function renderOrderedChart() {
     console.log(today)
     var current;
     today.forEach(function(section) {
-      if ( section.time == 1200 ) {
+      if ( section.time == time ) {
         current = section;
       }
     })
     data.push({
-      num: current.numStudents,
+      numStudents: current.numStudents,
+      numClasses: current.numClasses,
       building: buildingName
     })
   }
 
   data = data.sort(function(a, b) {
-    return a.num > b.num ? -1: 1;
+    return a.numStudents > b.numStudents ? -1: 1;
   }).splice(0, 10)
 
-  var j = 42
   new Chart(ctx, {
     type: 'horizontalBar',
     data: {
       labels: data.map(function(el) { return el.building }),
       datasets: [
         {
-          label: 'Building',
-          backgroundColor: 'rgba('+ getColor(j) +'.6)',
-          hoverBackgroundColor: 'rgba('+ getColor(j) +'.8)',
+          label: 'Number of Students',
+          backgroundColor: 'rgba('+ getColor(42) +'.6)',
+          hoverBackgroundColor: 'rgba('+ getColor(42) +'.8)',
           data: data.map(function(el) {
-            return el.num
+            return el.numStudents
+          })
+        },
+        {
+          label: 'Number of Classes',
+          backgroundColor: 'rgba('+ getColor(69) +'.6)',
+          hoverBackgroundColor: 'rgba('+ getColor(69) +'.8)',
+          data: data.map(function(el) {
+            return el.numClasses
           })
         }
       ]
