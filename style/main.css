@@ -1,4 +1,8 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,400i');
+
+* {
+	font-family: 'Roboto' !important;
+}
 
 html, body {
 	width: 100%;
@@ -18,7 +22,6 @@ html, body, select, input {
 button {
 	background-color: white;
 	color: #737373;
-	letter-spacing: 2px;
 	height: 30px;
 	margin-right: 20px;
 	line-height: 0;
@@ -28,6 +31,10 @@ button {
 
 div.weekdays, .weekdays select {
 	display: inline;
+}
+
+select {
+	color: #353535 !important;
 }
 
 select.day {
@@ -118,6 +125,7 @@ select.day {
 	height: 100%;
 	width: 399px;
 	z-index: 2;
+	box-shadow: 0 0 10px rgba(0,0,0,.2);
 }
 
 #statsButton {
@@ -142,6 +150,8 @@ select.day {
 	display: inline;
 	margin-right: 20px;
 	margin-left: 20px;
+	position: relative;
+	top: -8px;
 }
 
 #title {
@@ -309,11 +319,23 @@ label.btn-upload {
 	background: rgba(255, 255, 255, .8);
 	padding: 10px;
 	text-align: center;
-	z-index: 999;
+	z-index: 1;
 	right: 0;
 	left: 0;
 }
 
 .file-handler input {
 	margin: 0 auto;
+}
+
+#eventTitle {
+	border: none !important;
+	font-size: 20px;
+}
+
+#upcomingEvents .scheduledEvent {
+	color: #666;
+	background: white;
+	padding: 10px 20px;
+	border: none;
 }
