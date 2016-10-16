@@ -494,7 +494,7 @@ window.onload = function(e) {
 	});
 }
 
-function mark_schedule() {
+function mark_schedule(schedule) {
   var circles = [];
   console.log(schedule);
   $.each(schedule, function(day, content) {
@@ -504,17 +504,18 @@ function mark_schedule() {
       console.log(course);
     var name = course.name;
     var place = course.place;
-    var building = place.building;
-    var room = place.room;
-    var major = "";
-    $.each(name, function(i, c) {
-       major += (c + " ");
-    })
-    console.log(building);
-    var circle = findCircle(building);
-    circles.push(circle);  
+    if ( place ) {
+      var building = place.building;
+      var room = place.room;
+      var major = "";
+      $.each(name, function(i, c) {
+         major += (c + " ");
+      })
+      console.log(building);
+      var circle = findCircle(building);
+      circles.push(circle);  
+    }
     }) 
-    
   })
   highlightCircles(circles);
 }
@@ -562,3 +563,40 @@ function getEvents(building) {
     return event.location == building
   })
 }
+
+function previewFile() {
+  var file    = $('input[type="file"]').get(0).files[0];
+  var reader  = new FileReader();
+
+  reader.addEventListener("load", function () {
+    $.ajax({
+      url: 'https://api.imgur.com/3/image',
+      type: 'post',
+      headers: {
+          Authorization: 'Client-ID 31c54f7e6175b2b'
+      },
+      data: {
+          image: reader.result.split(',')[1]
+      },
+      dataType: 'json',
+      success: function(response) {
+        if (response.success) {
+          var url = response.data.link.split('/')
+          var fname = url[url.length - 1]
+
+          $.ajax({
+            url: 'http://192.241.190.28:3069/?url=' + fname
+          }).done(function(response) {
+              mark_schedule(response)
+          })
+        }
+      }
+    });
+  }, false);
+
+  if (file) {
+    reader.readAsDataURL(file);
+  }
+}
+
+$('input[type="file"]').on('change', previewFile)
