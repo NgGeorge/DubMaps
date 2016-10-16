@@ -173,11 +173,26 @@ function findCircle(code) {
   return null;
 }
 
+var fuse = new Fuse(mainData, {
+  shouldSort: true,
+  threshold: 0.6,
+  location: 0,
+  distance: 100,
+  maxPatternLength: 32,
+  keys: [
+    "code",
+    "building",
+    "name"
+  ]
+})
+
 // Search function
 $("#search").on('keyup', function (e) {
     if (e.keyCode == 13) {
         var entry = $("#search").val();
-        var search = entry; // replace with fuse search
+        var search = fuse.search(entry).map(function(thing) {
+            return thing.building;
+        }).splice(0, 5)
         var code = search;
         var circle = findCircle(code);
         if(circle != null) {
@@ -292,7 +307,6 @@ function renderOrderedChart(time) {
     var building = buildingsStudentData[buildingName];
     var day = 'Monday'
     var today = buildingsStudentData[buildingName][day]
-    console.log(today)
     var current;
     today.forEach(function(section) {
       if ( section.time == time ) {
