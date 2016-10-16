@@ -1,25 +1,21 @@
+L.mapbox.accessToken = 'pk.eyJ1IjoiZ25nY3AiLCJhIjoiY2lsNXd5b3ZrMDA0a3UybHoxY3h5NGN3eiJ9.OrXfMbZ123f3f1EfPRCHHA';
+var southWest = L.latLng(47.647252, -122.324270),
+    northEast = L.latLng(47.661635, -122.288589),
+    bounds = L.latLngBounds(southWest, northEast);
 
+bounds = L.latLngBounds(southWest, northEast);
+var map = L.mapbox.map('map', 'gngcp.p97o5d8j', {
+	maxBounds: bounds,
+  maxZoom: 18,
+  minZoom: 16,
+}).setView([47.653800, -122.307851], 17);
 
-var drawMap = function() {
-	L.mapbox.accessToken = 'pk.eyJ1IjoiZ25nY3AiLCJhIjoiY2lsNXd5b3ZrMDA0a3UybHoxY3h5NGN3eiJ9.OrXfMbZ123f3f1EfPRCHHA';
-	var southWest = L.latLng(47.647252, -122.324270),
-	    northEast = L.latLng(47.661635, -122.288589),
-	    bounds = L.latLngBounds(southWest, northEast);
-
-	bounds = L.latLngBounds(southWest, northEast);
-	var map = L.mapbox.map('map', 'gngcp.p97o5d8j', {
-		maxBounds: bounds,
-	  maxZoom: 18,
-	  minZoom: 16,
-	}).setView([47.653800, -122.307851], 17);
-
-  for (i = 0; i < buildingLocations.length; i++) {
-    var circle = L.circleMarker([buildingLocations[i].lat, buildingLocations[i].long]).addTo(map);
-    circle.setRadius('20');
-  }
-
-  overlayTiles(map);
+for (i = 0; i < buildingLocations.length; i++) {
+  var circle = L.circleMarker([buildingLocations[i].lat, buildingLocations[i].long]).addTo(map);
+  circle.setRadius(20);
 }
+
+overlayTiles(map);
 
 function overlayTiles(map) {
   var filename = 22873;
@@ -48,3 +44,72 @@ function overlayTiles(map) {
     y2 += dy;
   }
 }
+
+// Load shit from button press
+$(function() {
+  $('.btn--populations').on('click', function() {
+    $('.population-controls').animate({
+      'bottom': '0'
+    })
+    renderMap()
+  })
+})
+
+var time
+  , day
+  , chart = {}
+  , colors = ["#9e0142","#d53e4f","#f46d43","#fdae61","#fee08b","#ffffbf","#e6f598","#abdda4","#66c2a5","#3288bd","#5e4fa2"].reverse()
+  , colorsLen = colors.length
+
+function renderMap() {
+  $('.map').html('')
+  day = day || 'Monday'
+  time = time || 800
+
+  $.each(buildingsStudentData, function(buildingName, building) {
+    var sections = building[day]
+    $.each(sections, function(i, section) {
+      if ( section.time == time ) {
+        chart[buildingName] = { n: section.numStudents }
+      }
+    })
+  })
+
+  var maxStudents = Math.max.apply(Math, $.map(chart, function(info) {
+    return info.n
+  }))
+  maxStudents++
+
+  $.each(chart, function(name, info) {
+    chart[name].color = colors[Math.floor(info.n/maxStudents*colorsLen)]
+  })
+
+  var i = 0;
+  map.eachLayer(function(layer) {
+    if ( i > 0 ) {
+      map.removeLayer(layer)
+      i++;
+    }
+  })
+
+  var layer = new L.LayerGroup([]);
+  for (var i = 0; i < buildingLocations.length; i++) {
+    var name = buildingLocations[i].name
+    var circle = L.circleMarker([buildingLocations[i].lat, buildingLocations[i].long])
+    circle.setRadius(chart[name].n/maxStudents * 100);
+    circle.options.color = chart[name].color
+    circle.addTo(layer)
+  }
+  layer.addTo(map);
+}
+
+$('.population-controls .time').on('change', function() {
+  time = $(this).val()
+  time = time - ( time % 100 ) + Math.floor( ( time % 100 ) * 0.6 )
+  renderMap()
+})
+
+$('.population-controls .day').on('change', function() {
+  day = $(this).val()
+  renderMap()
+})
