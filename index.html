@@ -7,6 +7,11 @@
 		<title>DubMaps</title>
 		<!-- Charting Data -->
 	  <script src="js/data-buildingsStudent.js"></script>
+	  <script src="js/data-buildingsSubjects.js"></script>
+	  <script src="js/data.js"></script>
+
+	  <!-- Chart Libraries -->
+	  <script src="http://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.3/Chart.min.js"></script>
 
 		<!-- Jquery and Bootstrap -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -21,16 +26,24 @@
 		<script src='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js'></script>
 		<link href='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css' rel='stylesheet' />
 
+		<!-- Fuse -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/2.5.0/fuse.min.js"></script>
+
 		<!-- Custom -->
 		<script type="text/javascript" src="js/buildingLocations.js"></script>
 		<link rel="stylesheet" href="style/main.css"/>
 	</head>
 	<body>
-		<h1 id="title"> DUBMAPS @ <img src="imgs/signature.png" alt="UW Signature" id="UWsignature"> 
+		<h1 id="title"> DUBMAPS @ <img src="imgs/signature.png" alt="UW Signature" id="UWsignature">
 			<button type="button" id="schedule" class="btn btn-secondary" onclick="$('#scheduleView').toggle()" >SCHEDULE</button>
 			<input type="text" id="search" placeholder="Search i.e. 'ENGL 101 AB' or 'Denny Hall'" name="search">
 		</h1>
 		<div id="map">
+			<!-- Population Chart -->
+			<div class="ordered-population-chart-container" style="display: none;">
+			 		<canvas id="ordered-population-chart"></canvas>
+			</div>
+
 			<div id="scheduleView" style="display: none;">
 				<div id="filters">
 					<div class="btn-group" data-toggle="buttons">
@@ -43,7 +56,8 @@
 						<label class="btn btn-primary active">
 							<input type="checkbox" checked autocomplete="off"> RSO
 						</label>
-						<button id="populationButton" class="btn btn-secondary btn--populations">CLASS SIZE MAP</button>
+						<button id="populationButton" class="btn btn-secondary btn--populations">CAMPUS POPULATION MAP</button>
+						<button id="statsButton" class="btn btn-secondary" onclick="$('.ordered-population-chart-container').toggle()">CAMPUS TOP 10 BUILDING STATS</button>
 					</div>	
 				</div>
 			</div>
@@ -73,19 +87,21 @@
 			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 			          <span aria-hidden="true">&times;</span>
 			        </button>
-			        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+			        <h4 class="modal-title" id="myModalLabel"></h4>
 			      </div>
 			      <div class="modal-body">
 			        ...
 			      </div>
-			      <div class="modal-footer">
+			      <!-- <div class="modal-footer">
 			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			        <button type="button" class="btn btn-primary">Save changes</button>
-			      </div>
+			        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+			      </div> -->
 			    </div>
 			  </div>
 			</div>
+
+
 		</div>
-	<script type="text/javascript" src="js/map.js"></script>
+		<script type="text/javascript" src="js/map.js"></script>
 	</body>
 </html>

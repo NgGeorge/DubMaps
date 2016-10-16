@@ -46,23 +46,171 @@ function drawOverlayTiles() {
   }
 }
 
+function getStudentChart(buildingName, ctx) {
+  var building = buildingsStudentData[buildingName];
+  var day = 'Monday'
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: building[day].map(function(datapoint) {
+        if ( datapoint.time % 100 == 0 )
+          return (('0000' + datapoint.time).substr(datapoint.time.toString().length)).match(/.{2}/g, '').join(':')
+        return ''
+      }),
+      datasets: [
+        {
+          label: 'Number of students in ' + buildingName + ' on ' + day,
+          backgroundColor: 'rgba('+ getColor(Math.floor(Math.random() * 20)) +'.6)',
+          data: building[day].map(function(datapoint) {
+            return datapoint.numStudents
+          })
+        }
+      ]
+    }
+  })
+}
+
+function getSubjectChart(buildingName, ctx) {
+  var building = buildingsSubjectsData[buildingName];
+  var day = 'Monday'
+  var j = Math.floor(Math.random() * 20)
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: Object.keys(building[day]),
+      datasets: [
+        {
+          label: 'Classes of Subject in ' + buildingName + ' on ' + day,
+          backgroundColor: 'rgba('+ getColor(j) +'.6)',
+          hoverBackgroundColor: 'rgba('+ getColor(j) +'.8)',
+          data: Object.keys(building[day]).map(function(subj) {
+            return building[day][subj]
+          })
+        }
+      ]
+    },
+    options:{
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+            stepSize: 3
+          }
+        }]
+      }
+    }
+  })
+}
+
 function drawCircles(circleLayer) {
   for (i = 0; i < buildingLocations.length; i++) {
     var circle = L.circleMarker([buildingLocations[i].lat, buildingLocations[i].long]);
+    var title = buildingLocations[i].name;
+    var body = "example";
+    var content = "title: [" + title + "]\nbody: [" + body + "]";
     circle.setRadius(20);
-    circle.on('click', function(){$('#myModal').modal()});
+    circle.bindPopup(content);
     circle.options.className = 'buildingMark';
+    circle.on('click', function(){
+      toggleCircleModal(this);
+      map.panTo(this._latlng);
+    });
     circle.addTo(circleLayer);
   }
 }
 
+function toggleCircleModal(circle) {
+  $('#myModal').modal();
+  $('.modal-title').empty();
+  $('.modal-body').empty();
+  var myContent = circle._popup._content;
+  var myTitle = getCircleTitle(circle);
+  var myBody = getCircleBody(circle);
+
+  $('.modal-title').html(myTitle + ' Insights');
+  var ctx1 = document.createElement('canvas');
+  var ctx2 = document.createElement('canvas');
+  $('.modal-body').append(ctx1);
+  getStudentChart(myTitle, ctx1)
+  $('.modal-body').append(ctx2);
+  getSubjectChart(myTitle, ctx2);
+}
+
+function getCircleTitle(circle) {
+  var myContent = circle._popup._content;
+  var myTitle = /title: \[(.*?)\]/.exec(myContent)[1];
+  return myTitle;
+}
+
+function getCircleBody(circle) {
+  var myContent = circle._popup._content;
+  var myBody = /body: \[(.*?)\]/.exec(myContent)[1];
+  return myBody;
+}
+
+// Returns the circle corresponding to a code
+function findCircle(code) {
+  var target;
+  var arr = circleLayer.getLayers();
+
+  for(var i = 0; i < arr.length; i++) {
+    if(getCircleTitle(arr[i]).includes(code)) {
+      return arr[i];
+    }
+  }
+
+  return null;
+}
+
+var fuse = new Fuse(mainData, {
+  shouldSort: true,
+  threshold: 0.6,
+  location: 0,
+  distance: 100,
+  maxPatternLength: 32,
+  keys: [
+    "code",
+    "building",
+    "name"
+  ]
+})
+
+// Search function
+$("#search").on('keyup', function (e) {
+    if (e.keyCode == 13) {
+        var entry = $("#search").val();
+        var search = fuse.search(entry).map(function(thing) {
+            return thing.building;
+        }).splice(0, 5)
+        var code = search;
+        var circle = findCircle(code);
+        if(circle != null) {
+          toggleCircleModal(circle);
+          map.panTo(circle._latlng);
+       } else {
+         console.log(entry + " is not a valid building code.");
+       }
+    }
+});
+
 // Load shit from button press
 $(function() {
   $('.btn--populations').on('click', function() {
-    $('.population-controls').animate({
-      'bottom': '0'
-    })
-    renderMap()
+    var $controls = $('.population-controls')
+    if ( $controls.css('bottom') !== '0px' ) {
+      $controls.animate({
+        'bottom': '0'
+      })
+      renderMap()
+    } else {
+      $controls.animate({
+        'bottom': '-100%'
+      })
+      map.removeLayer(populationLayer)
+      circleLayer.addTo(map)
+    }
   })
 })
 
@@ -123,6 +271,88 @@ $('.population-controls .day').on('change', function() {
   day = $(this).val()
   renderMap()
 })
+
+
+function getColor (i) {
+  i = i || 0
+  var colors = [
+    '26, 188, 156,',
+    '46, 204, 113,',
+    '52, 152, 219,',
+    '155, 89, 182,',
+    '52, 73, 94,',
+    '241, 196, 15,',
+    '230, 126, 34,',
+    '231, 76, 60,'
+  ]
+
+  return colors[i % colors.length]
+}
+
+// Ordered Chart (Horizontal Bar)
+function renderOrderedChart(time) {
+  var ctx = $('#ordered-population-chart');
+  var data = [];
+  time = time || 1200;
+
+  for ( var buildingName in buildingsStudentData ) {
+    if (  !buildingsStudentData.hasOwnProperty(buildingName) ) continue;
+    var building = buildingsStudentData[buildingName];
+    var day = 'Monday'
+    var today = buildingsStudentData[buildingName][day]
+    var current;
+    today.forEach(function(section) {
+      if ( section.time == time ) {
+        current = section;
+      }
+    })
+    data.push({
+      numStudents: current.numStudents,
+      numClasses: current.numClasses,
+      building: buildingName
+    })
+  }
+
+  data = data.sort(function(a, b) {
+    return a.numStudents > b.numStudents ? -1: 1;
+  }).splice(0, 10)
+
+  new Chart(ctx, {
+    type: 'horizontalBar',
+    data: {
+      labels: data.map(function(el) { return el.building }),
+      datasets: [
+        {
+          label: 'Number of Students',
+          backgroundColor: 'rgba('+ getColor(42) +'.6)',
+          hoverBackgroundColor: 'rgba('+ getColor(42) +'.8)',
+          data: data.map(function(el) {
+            return el.numStudents
+          })
+        },
+        {
+          label: 'Number of Classes',
+          backgroundColor: 'rgba('+ getColor(69) +'.6)',
+          hoverBackgroundColor: 'rgba('+ getColor(69) +'.8)',
+          data: data.map(function(el) {
+            return el.numClasses
+          })
+        }
+      ]
+    },
+    options:{
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+          }
+        }]
+      }
+    }
+  })
+}
+
+renderOrderedChart()
 
 window.onload = function(e) {
 	$('div.population-controls').on('mouseover', function() {

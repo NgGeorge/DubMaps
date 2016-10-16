@@ -7,6 +7,12 @@ html, body {
 	margin: 0;
 	overflow: hidden;
 	padding: 0;
+	line-height: 1.5;
+}
+
+html, body, select, input {
+	font-size: 100%;
+	font-family: 'Open Sans', sans-serif;
 }
 
 button {
@@ -43,6 +49,7 @@ select.day {
 }
 
 #populationButton {
+	border-radius: 5px;
 	display: inline;
 	margin-right: 0;
 	width: 100%;	
@@ -91,6 +98,18 @@ select.day {
 	z-index: 2;
 }
 
+#statsButton {
+	border-top: 1px solid #d1d1d1;
+	border-radius: 5px;
+	display: inline;
+	margin-right: 0;
+	width: 100%;	
+}
+
+#statsButton:hover {
+	background-color: #d1d1d1;
+}
+
 #time {
 	border: 1px solid #d3d3d3;
 	border-radius: 5px;
@@ -113,7 +132,7 @@ select.day {
 
 
 #UWsignature {
-	height: 40px;	
+	height: 40px;
 	margin-right: 20px;
 	padding-bottom: 5px;
 	vertical-align: middle;
@@ -133,11 +152,23 @@ select.day {
 	z-index: 1;
 }
 
+.leaflet-popup {
+  display: none !important;
+}
+
 .leaflet-image-layer {
 	z-index: 1 !important;
 }
 
-.popMark {
+.ordered-population-chart-container {
+	background-color: white;
+	position: absolute;
+	width: 100%;
+	z-index: 2;
+}
+
+.ordered-population-chart-container canvas {
+	width: 70%;
 }
 
 @media only screen and (max-width: 500px) {
@@ -191,4 +222,8 @@ select.day {
 
 .population-controls select {
 	padding: 15px;
+}
+
+.modal {
+	cursor: default;
 }
