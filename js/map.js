@@ -1,4 +1,4 @@
-var drawMap = function() {
+//var drawMap = function() {
 	L.mapbox.accessToken = 'pk.eyJ1IjoiZ25nY3AiLCJhIjoiY2lsNXd5b3ZrMDA0a3UybHoxY3h5NGN3eiJ9.OrXfMbZ123f3f1EfPRCHHA';
 	var southWest = L.latLng(47.647252, -122.324270),
 	    northEast = L.latLng(47.661635, -122.288589),
@@ -24,9 +24,9 @@ var drawMap = function() {
   map.on('zoomend', function(e) {
     map.addLayer(circleLayer);
   });
-}
+//}
 
-function drawOverlayTiles(map) {
+function drawOverlayTiles() {
   var filename = 22873;
 
   var dy = -0.003650;
@@ -54,7 +54,7 @@ function drawOverlayTiles(map) {
   }
 }
 
-function drawCircles(map, circleLayer) {
+function drawCircles(circleLayer) {
   for (i = 0; i < buildingLocations.length; i++) {
     var circle = L.circleMarker([buildingLocations[i].lat, buildingLocations[i].long]);
     circle.setRadius(20);
@@ -62,3 +62,72 @@ function drawCircles(map, circleLayer) {
     circle.addTo(circleLayer);
   }
 }
+
+// Load shit from button press
+$(function() {
+  $('.btn--populations').on('click', function() {
+    $('.population-controls').animate({
+      'bottom': '0'
+    })
+    renderMap()
+  })
+})
+
+var time
+  , day
+  , chart = {}
+  , colors = ["#9e0142","#d53e4f","#f46d43","#fdae61","#fee08b","#ffffbf","#e6f598","#abdda4","#66c2a5","#3288bd","#5e4fa2"].reverse()
+  , colorsLen = colors.length
+
+function renderMap() {
+  $('.map').html('')
+  day = day || 'Monday'
+  time = time || 800
+
+  $.each(buildingsStudentData, function(buildingName, building) {
+    var sections = building[day]
+    $.each(sections, function(i, section) {
+      if ( section.time == time ) {
+        chart[buildingName] = { n: section.numStudents }
+      }
+    })
+  })
+
+  var maxStudents = Math.max.apply(Math, $.map(chart, function(info) {
+    return info.n
+  }))
+  maxStudents++
+
+  $.each(chart, function(name, info) {
+    chart[name].color = colors[Math.floor(info.n/maxStudents*colorsLen)]
+  })
+
+  var i = 0;
+  map.eachLayer(function(layer) {
+    if ( i > 0 ) {
+      map.removeLayer(layer)
+      i++;
+    }
+  })
+
+  var layer = new L.LayerGroup([]);
+  for (var i = 0; i < buildingLocations.length; i++) {
+    var name = buildingLocations[i].name
+    var circle = L.circleMarker([buildingLocations[i].lat, buildingLocations[i].long])
+    circle.setRadius(chart[name].n/maxStudents * 100);
+    circle.options.color = chart[name].color
+    circle.addTo(layer)
+  }
+  layer.addTo(map);
+}
+
+$('.population-controls .time').on('change', function() {
+  time = $(this).val()
+  time = time - ( time % 100 ) + Math.floor( ( time % 100 ) * 0.6 )
+  renderMap()
+})
+
+$('.population-controls .day').on('change', function() {
+  day = $(this).val()
+  renderMap()
+})

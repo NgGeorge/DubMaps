@@ -6,9 +6,10 @@ html, body {
 	font-family: 'Open Sans', sans-serif;
 	margin: 0;
 	overflow: hidden;
+	padding: 0;
 }
 
-g {
+/*g {
 	z-index: 2 !important;
 }
 
@@ -19,7 +20,7 @@ g path {
 	stroke-width: 5;
 	z-index: 2 !important;
 	transition: all .3s ease;
-}
+}*/
 
 g path:hover {
 	stroke-opacity: .8;
@@ -27,24 +28,37 @@ g path:hover {
 }
 
 #map {
-	height: calc(100% - 85px);
+	height: calc(100% - 76px);
 }
 
 #search {
 	border-radius: 5px;
-	font-size: 20px;
+	border: none;
+	padding: 20px 16px;
+	font-size: 16px;
 	width: 400px;
 	height: 30px;
 	vertical-align: middle;
-
+	color: #353535;
+	transition: all .3s ease;
 }
 
-#schedule {
+#search:hover {
+	background: #eee;
+}
+
+#search:focus {
+	outline: none;
+}
+
+button {
 	background-color: white;
 	color: #737373;
 	letter-spacing: 2px;
 	height: 30px;
 	margin-right: 20px;
+	line-height: 0;
+	padding: 0;
 }
 
 #scheduleView {
@@ -94,27 +108,51 @@ g path:hover {
 
 
 @media only screen and (max-width: 500px) {
-#search {
-	width: 100%
-}
+	#search {
+		width: 100%
+	}
 
-#schedule {
-	margin-right: 200px;
-}
+	#schedule {
+		margin-right: 200px;
+	}
 
-#UWsignature {
-	margin-top: 6px;
-	position: absolute;
-	clip: rect(0px, 50px, 50px, 0px);
-}
+	#UWsignature {
+		margin-top: 6px;
+		position: absolute;
+		clip: rect(0px, 50px, 50px, 0px);
+	}
 }
 
 @media only screen and (max-width: 600px) {
-#scheduleView {
-	width: 100%;
+	#scheduleView {
+		width: 100%;
+	}
+
+	.leaflet-top, .leaflet-bottom {
+		z-index: 1;
+	}
 }
 
-.leaflet-top, .leaflet-bottom {
-	z-index: 1;
+
+/* Population Controls */
+
+.population-controls {
+	background: rgba(255, 255, 255, .95);
+	position: fixed;
+	bottom: -100%;
+	left: 0;
+	right: 0;
+	padding: 60px;
+	text-align: center;
+	z-index: 99;
 }
+
+.population-controls input,
+.population-controls select {
+	width: 45%;
+	display: inline-block;
+}
+
+.population-controls select {
+	padding: 15px;
 }

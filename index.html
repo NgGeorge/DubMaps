@@ -5,6 +5,8 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>DubMaps</title>
+		<!-- Charting Data -->
+	  <script src="js/data-buildingsStudent.js"></script>
 
 		<!-- Jquery and Bootstrap -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -20,16 +22,14 @@
 		<link href='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css' rel='stylesheet' />
 
 		<!-- Custom -->
-		<script type="text/javascript" src="js/map.js"></script>
 		<script type="text/javascript" src="js/buildingLocations.js"></script>
 		<link rel="stylesheet" href="style/main.css"/>
-
 	</head>
-
 	<body>
 		<h1 id="title"> DUBMAPS @ <img src="imgs/signature.png" alt="UW Signature" id="UWsignature"> 
 			<button type="button" id="schedule" class="btn btn-secondary" onclick="$('#scheduleView').toggle()" >SCHEDULE</button>
 			<input type="text" id="search" placeholder="Search i.e. 'ENGL 101 AB' or 'Denny Hall'" name="search">
+			<button class="btn btn-secondary btn--populations">POPULATIONS</button>
 		</h1>
 		<div id="map">
 			<div id="scheduleView" style="display: none;">
@@ -44,11 +44,20 @@
 						<label class="btn btn-primary active">
 							<input type="checkbox" checked autocomplete="off"> RSO
 						</label>
-
-
 					</div>	
 				</div>
 			</div>
+			<div class="population-controls">
+				<input type="range" min="800" max="2000" step="25" class="time">
+			  <select class="day">
+			    <option value="Monday">Monday</option>
+			    <option value="Tuesday">Tuesday</option>
+			    <option value="Wednesday">Wednesday</option>
+			    <option value="Thursday">Thursday</option>
+			    <option value="Friday">Friday</option>
+			    <option value="Saturday">Saturday</option>
+			  </select>
+			 </div>
 
 			<!-- Button trigger modal -->
 			<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
@@ -76,8 +85,6 @@
 			  </div>
 			</div>
 		</div>
-		<script>
-			drawMap();
-		</script>
+	<script type="text/javascript" src="js/map.js"></script>
 	</body>
 </html>
