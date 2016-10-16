@@ -25,6 +25,7 @@ button {
 	padding: 0;
 }
 
+
 div.weekdays, .weekdays select {
 	display: inline;
 }
@@ -142,6 +143,18 @@ select.day {
 	border-radius: 0;
 	letter-spacing: 2px;
 	width: 33.45%;
+}
+
+.btn--upload {
+	border-radius: 0;
+	letter-spacing: 2px;
+	width: 100%;
+	color: #ffffff;
+}
+
+label.btn-upload {
+    text-align: middle;
+    cursor: pointer;
 }
 
 .leaflet-bottom.leaflet-right {
