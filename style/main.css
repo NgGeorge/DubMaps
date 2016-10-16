@@ -283,6 +283,11 @@ label.btn-upload {
 	cursor: default;
 }
 
+.modal-title {
+	font-size: 20px;
+  padding: 10px 0 0;
+}
+
 .modal-dialog {
 	width: 600px;
 	margin: 5vh auto;
