@@ -223,3 +223,7 @@ select.day {
 .modal {
 	cursor: default;
 }
+
+.modal-dialog {
+	width: 400px;
+}

@@ -86,7 +86,7 @@ function getStudentChart(buildingName, ctx) {
 function getSubjectChart(buildingName, ctx) {
   var building = buildingsSubjectsData[buildingName];
   var day = 'Monday'
-  var j = Math.floor(Math.random() * 20)
+  var j = Math.floor(Math.random() * 69)
 
   new Chart(ctx, {
     type: 'bar',
@@ -322,7 +322,7 @@ function renderMap() {
   var maxStudentsLog = Math.log(maxStudents);
 
   $.each(chart, function(name, info) {
-    chart[name].color = colors[Math.floor(Math.log(info.n)/maxStudentsLog*colorsLen)];
+    chart[name].color = colors[Math.floor((Math.log(info.n) || 0)/maxStudentsLog*colorsLen)];
   })
 
   var circles = circleLayer.getLayers();
@@ -331,15 +331,16 @@ function renderMap() {
   for(var i = 0; i < circles.length; i++) {
     var name = getCircleTitle(circles[i]);
     circles[i].setRadius(Math.log(chart[name].n)/maxStudentsLog * 100);
-    circles[i].setStyle({color: chart[name].color, fillOpacity: .75});
+    circles[i].setStyle({color: chart[name].color, fillOpacity: .5});
     circles[i].options.className = "popMark";
   }
 }
 
-$('.population-controls .time').on('change', function() {
+$('.population-controls .time').on('change input', function() {
   time = $(this).val()
-  time = time - ( time % 100 ) + Math.floor( ( time % 100 ) * 0.6 )
+  time = time - ( time % 100 ) + Math.round( ( time % 100 ) * 0.6 )
   renderMap()
+  renderOrderedChart(time)
 })
 
 $('.population-controls .day').on('change', function() {
@@ -491,6 +492,7 @@ function getClasses(building) {
         el.building == building &&
         parseFloat(el.time[0]) <= time &&
         parseFloat(el.time[1]) >= time &&
+        ( (parseFloat(el.time[1]) - parseFloat(el.time[0])) < 1200 ) &&
         el.days.indexOf(day) >= 0
       )
     }).splice(0, 5),
@@ -498,8 +500,9 @@ function getClasses(building) {
     upcoming: mainData.filter(function(el) {
       return (
         el.building == building &&
-        parseFloat(el.time[0]) <= hourFuture &&
-        parseFloat(el.time[1]) >= hourFuture &&
+        parseFloat(el.time[0]) <= timeFuture &&
+        parseFloat(el.time[1]) >= timeFuture &&
+        ( (parseFloat(el.time[1]) - parseFloat(el.time[0])) < 1200 ) &&
         el.days.indexOf(day) >= 0
       )
     }).splice(0, 5)
