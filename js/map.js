@@ -121,6 +121,12 @@ function drawCircles(circleLayer) {
       map.panTo(this._latlng);
       resetCircles();
       toggleCircleModal(this);
+      var $controls = $('.population-controls')
+      if ( $controls.css('bottom') == '0px' ) {
+        $controls.animate({
+          'bottom': '-100%'
+        })
+      }
     });
     circle.addTo(circleLayer);
   }
@@ -268,8 +274,6 @@ $(function() {
       $controls.animate({
         'bottom': '-100%'
       })
-      //map.removeLayer(populationLayer)
-      //circleLayer.addTo(map)
       resetCircles();
     }
   })
@@ -440,7 +444,7 @@ window.onload = function(e) {
 	});
 }
 
-// Get current and upcoming classes 
+// Get current and upcoming classes
 function getClasses(building) {
   var now = new Date()
     , day = 'Monday'
@@ -454,7 +458,7 @@ function getClasses(building) {
 
   var data = {
     current: mainData.filter(function(el) {
-      return ( 
+      return (
         el.building == building &&
         parseFloat(el.time[0]) <= time &&
         parseFloat(el.time[1]) >= time &&
@@ -463,7 +467,7 @@ function getClasses(building) {
     }).splice(0, 5),
 
     upcoming: mainData.filter(function(el) {
-      return ( 
+      return (
         el.building == building &&
         parseFloat(el.time[0]) <= hourFuture &&
         parseFloat(el.time[1]) >= hourFuture &&
