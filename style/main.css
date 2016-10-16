@@ -48,6 +48,15 @@ select.day {
 	stroke-width: 10;
 }
 
+#currentTitle, #upcomingTitle {
+	font-size: 30px;
+	padding-top: 10px;
+}
+
+.scheduledClass {
+	border-top: 1px solid #7e7e7e;
+}
+
 #populationButton {
 	border-radius: 5px;
 	display: inline;
