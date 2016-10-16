@@ -56,11 +56,69 @@ function drawOverlayTiles() {
   }
 }
 
+function getStudentChart(buildingName, ctx) {
+  var building = buildingsStudentData[buildingName];
+  var day = 'Monday'
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: building[day].map(function(datapoint) {
+        if ( datapoint.time % 100 == 0 )
+          return (('0000' + datapoint.time).substr(datapoint.time.toString().length)).match(/.{2}/g, '').join(':')
+        return ''
+      }),
+      datasets: [
+        {
+          label: 'Number of students in ' + buildingName + ' on ' + day,
+          backgroundColor: 'rgba('+ getColor(Math.floor(Math.random() * 20)) +'.6)',
+          data: building[day].map(function(datapoint) {
+            return datapoint.numStudents
+          })
+        }
+      ]
+    }
+  })
+}
+
+function getSubjectChart(buildingName, ctx) {
+  var building = buildingsSubjectsData[buildingName];
+  var day = 'Monday'
+  var j = Math.floor(Math.random() * 20)
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: Object.keys(building[day]),
+      datasets: [
+        {
+          label: 'Classes of Subject in ' + buildingName + ' on ' + day,
+          backgroundColor: 'rgba('+ getColor(j) +'.6)',
+          hoverBackgroundColor: 'rgba('+ getColor(j) +'.8)',
+          data: Object.keys(building[day]).map(function(subj) {
+            return building[day][subj]
+          })
+        }
+      ]
+    },
+    options:{ 
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+            stepSize: 3
+          }
+        }]
+      }
+    }
+  })
+}
+
 function drawCircles(circleLayer) {
   for (i = 0; i < buildingLocations.length; i++) {
     var circle = L.circleMarker([buildingLocations[i].lat, buildingLocations[i].long]);
-    var title = "<p>" + buildingLocations[i].name + "</p>";
-    var body = "<p>example</p>";
+    var title = buildingLocations[i].name;
+    var body = "example";
     var content = "title: [" + title + "]\nbody: [" + body + "]";
     circle.setRadius(20);
     circle.bindPopup(content);
@@ -68,11 +126,14 @@ function drawCircles(circleLayer) {
       $('#myModal').modal();
       $('.modal-title').empty();
       $('.modal-body').empty();
-      var myContent = this._popup._content;
-      var myTitle = getCircleTitle(this);
-      var myBody = getCircleBody(this);
-      $(myTitle).appendTo('.modal-title');
-      $(myBody).appendTo('.modal-body');
+      var buildingName = getCircleTitle(this);
+      // $('.modal-title').html(myTitle);
+      var ctx1 = document.createElement('canvas')
+      var ctx2 = document.createElement('canvas')
+      $('.modal-body').append(ctx1);
+      getStudentChart(buildingName, ctx1)
+      $('.modal-body').append(ctx2);
+      getSubjectChart(buildingName, ctx2)
     });
 
     circle.addTo(circleLayer);
@@ -107,7 +168,6 @@ $(function() {
       map.removeLayer(populationLayer)
       circleLayer.addTo(map)
     }
-
   })
 })
 
@@ -167,3 +227,19 @@ $('.population-controls .day').on('change', function() {
   day = $(this).val()
   renderMap()
 })
+
+function getColor (i) {
+  i = i || 0
+  var colors = [
+    '26, 188, 156,',
+    '46, 204, 113,',
+    '52, 152, 219,',
+    '155, 89, 182,',
+    '52, 73, 94,',
+    '241, 196, 15,',
+    '230, 126, 34,',
+    '231, 76, 60,'
+  ]
+
+  return colors[i % colors.length]
+}
