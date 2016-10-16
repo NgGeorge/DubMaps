@@ -229,9 +229,9 @@ $("#search").on('keyup', function (e) {
     var entry = $("#search").val();
     var search = fuse.search(entry).map(function(thing) {
         return thing.building;
+    }).filter(function(building) {
+        return building.length == 3
     }).splice(0, 5)
-
-    console.log(search);
 
     resetCircles();
 
@@ -247,8 +247,6 @@ $("#search").on('keyup', function (e) {
     } else {
       circles = null;
     }
-
-    console.log(circles);
 
     if(circles != null) {
       if(circles.length > 1) {
@@ -416,3 +414,41 @@ function renderOrderedChart(time) {
 }
 
 renderOrderedChart()
+
+
+// Get current and upcoming classes 
+function getClasses(building) {
+  var now = new Date()
+    , day = 'Monday'
+    , hour = ('00' + now.getHours()).substr(now.getHours().toString().length)
+    , minute = ('00' + now.getMinutes()).substr(now.getMinutes().toString().length)
+    , time = hour + minute
+    , hourFuture = parseFloat(hour)+3
+    , timeFuture = ('00' + hourFuture).substr(hourFuture.toString().length) + minute
+
+  building = building || 'MGH'
+
+  var data = {
+    current: mainData.filter(function(el) {
+      return ( 
+        el.building == building &&
+        parseFloat(el.time[0]) <= time &&
+        parseFloat(el.time[1]) >= time &&
+        el.days.indexOf(day) >= 0
+      )
+    }).splice(0, 5),
+
+    upcoming: mainData.filter(function(el) {
+      return ( 
+        el.building == building &&
+        parseFloat(el.time[0]) <= hourFuture &&
+        parseFloat(el.time[1]) >= hourFuture &&
+        el.days.indexOf(day) >= 0
+      )
+    }).splice(0, 5)
+  }
+
+  return data
+}
+
+console.log(getClasses())
