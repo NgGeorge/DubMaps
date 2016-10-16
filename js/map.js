@@ -130,13 +130,27 @@ function toggleCircleModal(circle) {
   $('#myModal').modal();
   $('.modal-title').empty();
   $('.modal-body').empty();
-  var myContent = circle._popup._content;
   var myTitle = getCircleTitle(circle);
   var myBody = getCircleBody(circle);
 
   $('.modal-title').html(myTitle + ' Insights');
   var ctx1 = document.createElement('canvas');
   var ctx2 = document.createElement('canvas');
+  var currentClasses = document.createElement('div');
+  var cClasses = getClasses(myTitle);
+  $('.modal-body').append('<h1 id="currentTitle"> Current Classes </h1>');
+  for (i = 0; i < cClasses.current.length; i++) {
+  	$(currentClasses).append('<h2 class="scheduledClass">' + cClasses.current[i].code + ' ' + cClasses.current[i].room + ' @ ' + cClasses.current[i].time[0] + ' to ' + cClasses.current[i].time[1] + '</h2>'); 	
+  }
+  $('.modal-body').append(currentClasses);
+
+  var upcomingClasses = document.createElement('div');
+  $('.modal-body').append('<h1 id="upcomingTitle"> Upcoming Classes </h1>');
+  for (i = 0; i < cClasses.upcoming.length; i++) {
+  	$(currentClasses).append('<h2 class="scheduledClass">' + cClasses.upcoming[i].code + ' ' + cClasses.upcoming[i].room + ' @ ' + cClasses.upcoming[i].time[0] + ' to ' + cClasses.upcoming[i].time[1] + '</h2>'); 	
+  }
+  $('.modal-body').append(upcomingClasses);
+
   $('.modal-body').append(ctx1);
   getStudentChart(myTitle, ctx1)
   $('.modal-body').append(ctx2);
@@ -197,8 +211,7 @@ function highlightCircles(circles) {
 
   for(var i = 0; i < circles.length; i++) {
     if(circles[i] != null) {
-      circles[i].options.className = "highlight";
-      circles[i].setStyle({color: '#ADD8E6', weight: 7, fillOpacity: 0.4});
+      circles[i].setStyle({color: '#ADD8E6', weight: 7, fillOpacity: 0.4, className : 'highlight'});
       circles[i].setRadius(30);
       lat += circles[i]._latlng.lat;
       lng += circles[i]._latlng.lng;
@@ -312,8 +325,7 @@ function renderMap() {
   for(var i = 0; i < circles.length; i++) {
     var name = getCircleTitle(circles[i]);
     circles[i].setRadius(Math.log(chart[name].n)/maxStudentsLog * 100);
-    circles[i].setStyle({color: chart[name].color, fillOpacity: .75});
-    circles[i].options.className = "popMark";
+    circles[i].setStyle({color: chart[name].color, fillOpacity: .75, className: 'popMark'});
   }
 }
 
