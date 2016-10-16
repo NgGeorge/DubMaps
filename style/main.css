@@ -283,6 +283,10 @@ label.btn-upload {
 	cursor: default;
 }
 
+.modal-body {
+	padding-top: 0;
+}
+
 .modal-title {
 	font-size: 20px;
   padding: 10px 0 0;
