@@ -1,3 +1,119 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+html, body {
+	width: 100%;
+	height: 100%;
+	font-family: 'Open Sans', sans-serif;
+	margin: 0;
+	overflow: hidden;
+}
+
+g {
+	z-index: 2 !important;
+}
+
+g path {
+	fill-opacity: 0;
+	stroke-opacity: 0.5;
+	stroke: #FFD700;
+	stroke-width: 5;
+	z-index: 2 !important;
+}
+
+g path:hover {
+	stroke-opacity: 1;
+	stroke-width: 10;
+}
+
 #map {
-	height: 600px;
+	height: calc(100% - 85px);
+}
+
+#search {
+	border-radius: 5px;
+	font-size: 20px;
+	width: 400px;
+	height: 30px;
+	vertical-align: middle;
+
+}
+
+#schedule {
+	background-color: white;
+	color: #737373;
+	letter-spacing: 2px;
+	height: 30px;
+	margin-right: 20px;
+}
+
+#scheduleView {
+	background-color: #737373;
+	opacity: 0.9;
+	position: absolute;
+	right: 0;
+	height: 100%;
+	width: 399px;
+	z-index: 2;
+}
+
+#title {
+	background-color:  #4b2e83;
+	color: white;
+	font-size: 40px;
+	letter-spacing: 3px;
+	margin: 0;
+	padding: 15px;
+}
+
+
+#UWsignature {
+	height: 40px;	
+	margin-right: 20px;
+	padding-bottom: 5px;
+	vertical-align: middle;
+}
+
+.btn-group {
+	width: 100%;
+}
+
+.btn.btn-primary {
+	border-radius: 0;
+	letter-spacing: 2px;
+	width: 33.5%;		
+}
+
+.leaflet-bottom.leaflet-right {
+	z-index: 1;
+}
+
+.leaflet-image-layer {
+	z-index: 1 !important;
+}
+
+
+@media only screen and (max-width: 500px) {
+#search {
+	width: 100%
+}
+
+#schedule {
+	margin-right: 200px;
+}
+
+#UWsignature {
+	margin-top: 6px;
+	position: absolute;
+	clip: rect(0px, 50px, 50px, 0px);
+}
+}
+
+@media only screen and (max-width: 600px) {
+#scheduleView {
+	width: 100%;
+}
+
+.leaflet-top, .leaflet-bottom {
+	z-index: 1;
+}
 }

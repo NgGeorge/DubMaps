@@ -8,7 +8,7 @@
 
 		<!-- Jquery and Bootstrap -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 		<!-- Leaflet -->
@@ -25,7 +25,29 @@
 	</head>
 
 	<body>
-		<div id="map"></div>
+		<h1 id="title"> DUBMAPS @ <img src="imgs/signature.png" alt="UW Signature" id="UWsignature"> 
+			<button type="button" id="schedule" class="btn btn-secondary" onclick="$('#scheduleView').toggle()" >SCHEDULE</button>
+			<input type="text" id="search" placeholder="Search i.e. 'ENGL 101 AB' or 'Denny Hall'" name="search">
+		</h1>
+		<div id="map">
+			<div id="scheduleView" style="display: none;">
+				<div id="filters">
+					<div class="btn-group" data-toggle="buttons">
+						<label class="btn btn-primary active">
+							<input type="checkbox" checked autocomplete="off"> EVENTS
+						</label>
+						<label class="btn btn-primary active">
+							<input type="checkbox" checked autocomplete="off"> CLASSES
+						</label>
+						<label class="btn btn-primary active">
+							<input type="checkbox" checked autocomplete="off"> RSO
+						</label>
+
+
+					</div>	
+				</div>
+			</div>
+		</div>
 		<script>
 			drawMap();
 		</script>
