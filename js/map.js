@@ -101,7 +101,7 @@ function getSubjectChart(buildingName, ctx) {
         }
       ]
     },
-    options:{ 
+    options:{
       scales: {
         yAxes: [{
           ticks: {
@@ -123,21 +123,28 @@ function drawCircles(circleLayer) {
     circle.setRadius(20);
     circle.bindPopup(content);
     circle.on('click', function(){
-      $('#myModal').modal();
-      $('.modal-title').empty();
-      $('.modal-body').empty();
-      var buildingName = getCircleTitle(this);
-      $('.modal-title').html(buildingName + ' Insights');
-      var ctx1 = document.createElement('canvas')
-      var ctx2 = document.createElement('canvas')
-      $('.modal-body').append(ctx1);
-      getStudentChart(buildingName, ctx1)
-      $('.modal-body').append(ctx2);
-      getSubjectChart(buildingName, ctx2)
+      toggleCircleModal(this);
+      map.panTo(this._latlng);
     });
-
     circle.addTo(circleLayer);
   }
+}
+
+function toggleCircleModal(circle) {
+  $('#myModal').modal();
+  $('.modal-title').empty();
+  $('.modal-body').empty();
+  var myContent = circle._popup._content;
+  var myTitle = getCircleTitle(circle);
+  var myBody = getCircleBody(circle);
+
+  $('.modal-title').html(myTitle + ' Insights');
+  var ctx1 = document.createElement('canvas');
+  var ctx2 = document.createElement('canvas');
+  $('.modal-body').append(ctx1);
+  getStudentChart(buildingName, ctx1)
+  $('.modal-body').append(ctx2);
+  getSubjectChart(buildingName, ctx2);
 }
 
 function getCircleTitle(circle) {
@@ -151,6 +158,36 @@ function getCircleBody(circle) {
   var myBody = /body: \[(.*?)\]/.exec(myContent)[1];
   return myBody;
 }
+
+// Returns the circle corresponding to a code
+function findCircle(code) {
+  var target;
+  var arr = circleLayer.getLayers();
+
+  for(var i = 0; i < arr.length; i++) {
+    if(getCircleTitle(arr[i]).includes(code)) {
+      return arr[i];
+    }
+  }
+
+  return null;
+}
+
+// Search function
+$("#search").on('keyup', function (e) {
+    if (e.keyCode == 13) {
+        var entry = $("#search").val();
+        var search = entry; // replace with fuse search
+        var code = search;
+        var circle = findCircle(code);
+        if(circle != null) {
+          toggleCircleModal(circle);
+          map.panTo(circle._latlng);
+       } else {
+         console.log(entry + " is not a valid building code.");
+       }
+    }
+});
 
 // Load shit from button press
 $(function() {
