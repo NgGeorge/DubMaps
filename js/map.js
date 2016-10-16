@@ -322,7 +322,7 @@ function renderMap() {
   var maxStudentsLog = Math.log(maxStudents);
 
   $.each(chart, function(name, info) {
-    chart[name].color = colors[Math.floor(Math.log(info.n)/maxStudentsLog*colorsLen)];
+    chart[name].color = colors[Math.floor((Math.log(info.n) || 0)/maxStudentsLog*colorsLen)];
   })
 
   var circles = circleLayer.getLayers();
@@ -331,15 +331,17 @@ function renderMap() {
   for(var i = 0; i < circles.length; i++) {
     var name = getCircleTitle(circles[i]);
     circles[i].setRadius(Math.log(chart[name].n)/maxStudentsLog * 100);
-    circles[i].setStyle({color: chart[name].color, fillOpacity: .75});
+    circles[i].setStyle({color: chart[name].color, fillOpacity: .5});
     circles[i].options.className = "popMark";
   }
 }
 
-$('.population-controls .time').on('change', function() {
+$('.population-controls .time').on('change input', function() {
   time = $(this).val()
-  time = time - ( time % 100 ) + Math.floor( ( time % 100 ) * 0.6 )
+  time = time - ( time % 100 ) + Math.round( ( time % 100 ) * 0.6 )
+  console.log(time)
   renderMap()
+  renderOrderedChart(time)
 })
 
 $('.population-controls .day').on('change', function() {
@@ -370,6 +372,8 @@ function renderOrderedChart(time) {
   var data = [];
   time = time || 1200;
 
+  console.log('Time:', time)
+
   for ( var buildingName in buildingsStudentData ) {
     if (  !buildingsStudentData.hasOwnProperty(buildingName) ) continue;
     var building = buildingsStudentData[buildingName];
@@ -378,6 +382,7 @@ function renderOrderedChart(time) {
     var current;
     today.forEach(function(section) {
       if ( section.time == time ) {
+        console.log('Time:', time, ' Section time:', section.time)
         current = section;
       }
     })
@@ -491,6 +496,7 @@ function getClasses(building) {
         el.building == building &&
         parseFloat(el.time[0]) <= time &&
         parseFloat(el.time[1]) >= time &&
+        ( parseFloat(el.time[1]) - parseFloat(el.time[0]) < 12 ) &&
         el.days.indexOf(day) >= 0
       )
     }).splice(0, 5),
