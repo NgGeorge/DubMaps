@@ -502,6 +502,14 @@ window.onload = function(e) {
 		}
 		$('#time').html(hour + ':' + minutes);
 	});
+
+	 var upcomingEvents = document.createElement('div');
+	 var events = getEvents();
+  	for (i = 0; i < events.length; i++) {
+  	$(upcomingEvents).append('<h2 class="scheduledEvent">' + events[i].name + ' ' + events[i].location + ' @ ' + events[i].time + '</h2>'); 	
+  	}
+  	$('#upcomingEvents').append(upcomingEvents);
+
 }
 
 function mark_schedule() {
@@ -572,3 +580,4 @@ function getEvents(building) {
     return event.location == building
   })
 }
+
