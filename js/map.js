@@ -181,8 +181,8 @@ var fuse = new Fuse(mainData, {
 function resetCircles() {
   var circles = circleLayer.getLayers();
   for(var i = 0; i < circles.length; i++) {
-    circles[i].setStyle({color: '#3388ff', weight: 3, fillOpacity: 0.2});
     circles[i].setRadius(20);
+    circles[i].options.className = "buildingMark";
   }
 }
 
@@ -193,9 +193,9 @@ function highlightCircles(circles) {
 
   for(var i = 0; i < circles.length; i++) {
     if(circles[i] != null) {
-      circles[i].setStyle({color: '#EDED11', weight: 7, fillOpacity: 0.4});
+      circles[i].options.className = "highlight";
+      circles[i].setStyle({color: '#ADD8E6', weight: 7, fillOpacity: 0.4});
       circles[i].setRadius(30);
-      //console.log(circles[i]);
       lat += circles[i]._latlng.lat;
       lng += circles[i]._latlng.lng;
       total++;
