@@ -144,13 +144,27 @@ function toggleCircleModal(circle) {
   $('#myModal').modal();
   $('.modal-title').empty();
   $('.modal-body').empty();
-  var myContent = circle._popup._content;
   var myTitle = getCircleTitle(circle);
   var myBody = getCircleBody(circle);
 
   $('.modal-title').html(buildingCodes.get(getCircleTitle(circle)) + ' (' + getCircleTitle(circle) + ') Insights');
   var ctx1 = document.createElement('canvas');
   var ctx2 = document.createElement('canvas');
+  var currentClasses = document.createElement('div');
+  var cClasses = getClasses(myTitle);
+  $('.modal-body').append('<h1 id="currentTitle"> Current Classes </h1>');
+  for (i = 0; i < cClasses.current.length; i++) {
+  	$(currentClasses).append('<h2 class="scheduledClass">' + cClasses.current[i].code + ' ' + cClasses.current[i].room + ' @ ' + cClasses.current[i].time[0] + ' to ' + cClasses.current[i].time[1] + '</h2>'); 	
+  }
+  $('.modal-body').append(currentClasses);
+
+  var upcomingClasses = document.createElement('div');
+  $('.modal-body').append('<h1 id="upcomingTitle"> Upcoming Classes </h1>');
+  for (i = 0; i < cClasses.upcoming.length; i++) {
+  	$(upcomingClasses).append('<h2 class="scheduledClass">' + cClasses.upcoming[i].code + ' ' + cClasses.upcoming[i].room + ' @ ' + cClasses.upcoming[i].time[0] + ' to ' + cClasses.upcoming[i].time[1] + '</h2>'); 	
+  }
+  $('.modal-body').append(upcomingClasses);
+
   $('.modal-body').append(ctx1);
   getStudentChart(myTitle, ctx1)
   $('.modal-body').append(ctx2);
@@ -474,6 +488,31 @@ window.onload = function(e) {
 	});
 }
 
+function mark_schedule() {
+  var circles = [];
+  console.log(schedule);
+  $.each(schedule, function(day, content) {
+    console.log(content); 
+    var courses = content.courses;
+    $.each(courses, function(n, course) {
+      console.log(course);
+    var name = course.name;
+    var place = course.place;
+    var building = place.building;
+    var room = place.room;
+    var major = "";
+    $.each(name, function(i, c) {
+       major += (c + " ");
+    })
+    console.log(building);
+    var circle = findCircle(building);
+    circles.push(circle);  
+    }) 
+    
+  })
+  highlightCircles(circles);
+}
+
 // Get current and upcoming classes
 function getClasses(building) {
   var now = new Date()
@@ -511,4 +550,12 @@ function getClasses(building) {
   return data
 }
 
+function getEvents(building) {
+  building = building || 'MGH'
+  return eventsData.filter(function(event) {
+    return event.location == building
+  })
+}
+
 console.log(getClasses())
+console.log(getEvents())
