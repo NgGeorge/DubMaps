@@ -127,7 +127,7 @@ function drawCircles(circleLayer) {
       $('.modal-title').empty();
       $('.modal-body').empty();
       var buildingName = getCircleTitle(this);
-      // $('.modal-title').html(myTitle);
+      $('.modal-title').html(buildingName + ' Insights');
       var ctx1 = document.createElement('canvas')
       var ctx2 = document.createElement('canvas')
       $('.modal-body').append(ctx1);
