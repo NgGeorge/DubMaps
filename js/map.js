@@ -144,13 +144,33 @@ function toggleCircleModal(circle) {
   $('#myModal').modal();
   $('.modal-title').empty();
   $('.modal-body').empty();
-  var myContent = circle._popup._content;
   var myTitle = getCircleTitle(circle);
   var myBody = getCircleBody(circle);
 
   $('.modal-title').html(buildingCodes.get(getCircleTitle(circle)) + ' (' + getCircleTitle(circle) + ') Insights');
   var ctx1 = document.createElement('canvas');
   var ctx2 = document.createElement('canvas');
+  var currentClasses = document.createElement('div');
+  var cClasses = getClasses(myTitle);
+  if ( cClasses.current.length ) {
+    $('.modal-body').append('<h1 id="currentTitle"> Current Classes </h1>');
+    for (i = 0; i < cClasses.current.length; i++) {
+    	$(currentClasses).append('<h2 class="scheduledClass">' + cClasses.current[i].code + ' ' + cClasses.current[i].room + ' @ ' + cClasses.current[i].time[0] + ' to ' + cClasses.current[i].time[1] + '</h2>');
+    }
+    $('.modal-body').append(currentClasses);
+  }
+
+  if ( cClasses.upcoming.length ) {
+    var upcomingClasses = document.createElement('div');
+    $('.modal-body').append('<h1 id="upcomingTitle"> Upcoming Classes </h1>');
+    for (i = 0; i < cClasses.upcoming.length; i++) {
+    	$(upcomingClasses).append('<h2 class="scheduledClass">' + cClasses.upcoming[i].code + ' ' + cClasses.upcoming[i].room + ' @ ' + cClasses.upcoming[i].time[0] + ' to ' + cClasses.upcoming[i].time[1] + '</h2>');
+    }
+    $('.modal-body').append(upcomingClasses);
+  }
+
+  ctx1.style.marginTop = "10px"
+  ctx2.style.marginTop = "10px"
   $('.modal-body').append(ctx1);
   getStudentChart(myTitle, ctx1)
   $('.modal-body').append(ctx2);
@@ -451,6 +471,16 @@ window.onload = function(e) {
     map.doubleClickZoom.enable();
     map.scrollWheelZoom.enable();
 	});
+  $('div #myModal').on('mouseover', function() {
+		map.dragging.disable();
+    map.doubleClickZoom.disable();
+    map.scrollWheelZoom.disable();
+	});
+	$('div #myModal').on('mouseout', function() {
+		map.dragging.enable();
+    map.doubleClickZoom.enable();
+    map.scrollWheelZoom.enable();
+	});
 	$('#slider').on('change', function() {
 		var hour = Math.floor($('#slider').val() / 100);
 		var minutes;
@@ -472,13 +502,21 @@ window.onload = function(e) {
 		}
 		$('#time').html(hour + ':' + minutes);
 	});
+
+	 var upcomingEvents = document.createElement('div');
+	 var events = getEvents();
+  	for (i = 0; i < events.length; i++) {
+  	$(upcomingEvents).append('<h2 class="scheduledEvent">' + events[i].name + ' ' + events[i].location + ' @ ' + events[i].time + '</h2>'); 	
+  	}
+  	$('#upcomingEvents').append(upcomingEvents);
+
 }
 
 function mark_schedule() {
   var circles = [];
   console.log(schedule);
   $.each(schedule, function(day, content) {
-    console.log(content); 
+    console.log(content);
     var courses = content.courses;
     $.each(courses, function(n, course) {
       console.log(course);
@@ -492,9 +530,9 @@ function mark_schedule() {
     })
     console.log(building);
     var circle = findCircle(building);
-    circles.push(circle);  
-    }) 
-    
+    circles.push(circle);
+    })
+
   })
   highlightCircles(circles);
 }
@@ -543,5 +581,3 @@ function getEvents(building) {
   })
 }
 
-console.log(getClasses())
-console.log(getEvents())
