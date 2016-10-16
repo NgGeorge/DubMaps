@@ -227,9 +227,9 @@ $("#search").on('keyup', function (e) {
     var entry = $("#search").val();
     var search = fuse.search(entry).map(function(thing) {
         return thing.building;
+    }).filter(function(building) {
+        return building.length == 3
     }).splice(0, 5)
-
-    console.log(search);
 
     resetCircles();
 
@@ -245,8 +245,6 @@ $("#search").on('keyup', function (e) {
     } else {
       circles = null;
     }
-
-    console.log(circles);
 
     if(circles != null) {
       if(circles.length > 1) {
