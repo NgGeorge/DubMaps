@@ -86,7 +86,7 @@ function getStudentChart(buildingName, ctx) {
 function getSubjectChart(buildingName, ctx) {
   var building = buildingsSubjectsData[buildingName];
   var day = 'Monday'
-  var j = Math.floor(Math.random() * 20)
+  var j = Math.floor(Math.random() * 69)
 
   new Chart(ctx, {
     type: 'bar',
