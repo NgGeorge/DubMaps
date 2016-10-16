@@ -17,12 +17,10 @@ drawCircles(circleLayer);
 resetCircles();
 
 map.on('zoomstart', function(e) {
-  console.log("Zoom start!");
   map.removeLayer(circleLayer);
 });
 
 map.on('zoomend', function(e) {
-  console.log("Zoom end!");
   map.addLayer(circleLayer);
 });
 
