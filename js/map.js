@@ -13,8 +13,17 @@ var drawMap = function() {
 
   drawOverlayTiles(map);
 
-  var circleLayer = L.featureGroup().addTo(map);
+  var circleLayer = L.layerGroup().addTo(map);
   drawCircles(map, circleLayer);
+
+  // Hides circles so that they don't drift on zoom
+  map.on('zoomstart', function(e) {
+    map.removeLayer(circleLayer);
+  });
+
+  map.on('zoomend', function(e) {
+    map.addLayer(circleLayer);
+  });
 }
 
 function drawOverlayTiles(map) {
