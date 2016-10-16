@@ -35,10 +35,6 @@ select.day {
 }
 
 .buildingMark {
-	fill-opacity: 0;
-	stroke-opacity: 0.5;
-	stroke: #FFD700;
-	stroke-width: 5;
 	z-index: 2 !important;
 	transition: all .3s ease;
 }
@@ -61,7 +57,7 @@ select.day {
 	border-radius: 5px;
 	display: inline;
 	margin-right: 0;
-	width: 100%;	
+	width: 100%;
 }
 
 #populationButton:hover {
@@ -112,7 +108,7 @@ select.day {
 	border-radius: 5px;
 	display: inline;
 	margin-right: 0;
-	width: 100%;	
+	width: 100%;
 }
 
 #statsButton:hover {
@@ -154,7 +150,7 @@ select.day {
 .btn.btn-primary {
 	border-radius: 0;
 	letter-spacing: 2px;
-	width: 33.45%;		
+	width: 33.45%;
 }
 
 .leaflet-bottom.leaflet-right {
@@ -235,4 +231,8 @@ select.day {
 
 .modal {
 	cursor: default;
+}
+
+.modal-dialog {
+	width: 400px;
 }

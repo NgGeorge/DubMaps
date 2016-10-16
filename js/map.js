@@ -1,4 +1,4 @@
-var map; 
+var map;
 
 //var drawMap = function() {
 
@@ -20,7 +20,15 @@ var circleLayer = L.layerGroup().addTo(map);
 drawCircles(circleLayer);
 resetCircles();
 
-var populationView = false;
+map.on('zoomstart', function(e) {
+  console.log("Zoom start!");
+  map.removeLayer(circleLayer);
+});
+
+map.on('zoomend', function(e) {
+  console.log("Zoom end!");
+  map.addLayer(circleLayer);
+});
 
 function drawOverlayTiles() {
   var filename = 22873;
@@ -78,7 +86,7 @@ function getStudentChart(buildingName, ctx) {
 function getSubjectChart(buildingName, ctx) {
   var building = buildingsSubjectsData[buildingName];
   var day = 'Monday'
-  var j = Math.floor(Math.random() * 20)
+  var j = Math.floor(Math.random() * 69)
 
   new Chart(ctx, {
     type: 'bar',
@@ -121,6 +129,12 @@ function drawCircles(circleLayer) {
       map.panTo(this._latlng);
       resetCircles();
       toggleCircleModal(this);
+      var $controls = $('.population-controls')
+      if ( $controls.css('bottom') == '0px' ) {
+        $controls.animate({
+          'bottom': '-100%'
+        })
+      }
     });
     circle.addTo(circleLayer);
   }
@@ -201,6 +215,13 @@ function resetCircles() {
   for(var i = 0; i < circles.length; i++) {
     circles[i].setRadius(20);
     circles[i].options.className = "buildingMark";
+    circles[i].setStyle({
+      fillOpacity: 0,
+    	opacity: 0.5,
+    	color: '#FFD700',
+    	weight: 5
+    	// z-index: '2 !important',
+    });
   }
 }
 
@@ -211,8 +232,9 @@ function highlightCircles(circles) {
 
   for(var i = 0; i < circles.length; i++) {
     if(circles[i] != null) {
-      circles[i].setStyle({color: '#ADD8E6', weight: 7, fillOpacity: 0.4, className : 'highlight'});
-      circles[i].setRadius(30);
+      circles[i].options.className = "highlight";
+      circles[i].setStyle({color: '#EF1AEF', weight: 7, fillOpacity: 0.5});
+      circles[i].setRadius(40);
       lat += circles[i]._latlng.lat;
       lng += circles[i]._latlng.lng;
       total++;
@@ -281,8 +303,6 @@ $(function() {
       $controls.animate({
         'bottom': '-100%'
       })
-      //map.removeLayer(populationLayer)
-      //circleLayer.addTo(map)
       resetCircles();
     }
   })
@@ -316,7 +336,7 @@ function renderMap() {
   var maxStudentsLog = Math.log(maxStudents);
 
   $.each(chart, function(name, info) {
-    chart[name].color = colors[Math.floor(Math.log(info.n)/maxStudentsLog*colorsLen)];
+    chart[name].color = colors[Math.floor((Math.log(info.n) || 0)/maxStudentsLog*colorsLen)];
   })
 
   var circles = circleLayer.getLayers();
@@ -325,14 +345,16 @@ function renderMap() {
   for(var i = 0; i < circles.length; i++) {
     var name = getCircleTitle(circles[i]);
     circles[i].setRadius(Math.log(chart[name].n)/maxStudentsLog * 100);
-    circles[i].setStyle({color: chart[name].color, fillOpacity: .75, className: 'popMark'});
+    circles[i].setStyle({color: chart[name].color, fillOpacity: .5});
+    circles[i].options.className = "popMark";
   }
 }
 
-$('.population-controls .time').on('change', function() {
+$('.population-controls .time').on('change input', function() {
   time = $(this).val()
-  time = time - ( time % 100 ) + Math.floor( ( time % 100 ) * 0.6 )
+  time = time - ( time % 100 ) + Math.round( ( time % 100 ) * 0.6 )
   renderMap()
+  renderOrderedChart(time)
 })
 
 $('.population-controls .day').on('change', function() {
@@ -425,34 +447,48 @@ renderOrderedChart()
 window.onload = function(e) {
 	$('div.population-controls').on('mouseover', function() {
 		map.dragging.disable();
+    map.doubleClickZoom.disable();
+    map.scrollWheelZoom.disable();
 	});
 	$('div.population-controls').on('mouseout', function() {
 		map.dragging.enable();
+    map.doubleClickZoom.enable();
+    map.scrollWheelZoom.enable();
+	});
+  $('div #scheduleView').on('mouseover', function() {
+		map.dragging.disable();
+    map.doubleClickZoom.disable();
+    map.scrollWheelZoom.disable();
+	});
+	$('div #scheduleView').on('mouseout', function() {
+		map.dragging.enable();
+    map.doubleClickZoom.enable();
+    map.scrollWheelZoom.enable();
 	});
 	$('#slider').on('change', function() {
 		var hour = Math.floor($('#slider').val() / 100);
 		var minutes;
 		if($('#slider').val() % 100 >= 60) {
 			hour++;
-			minutes = Math.abs(60 - $('#slider').val()%100);	
+			minutes = Math.abs(60 - $('#slider').val()%100);
 		} else {
 			minutes = $('#slider').val()%100;
-		}	
-		
+		}
+
 		if(minutes == 0) {
 			minutes = "00";
 		}
 		if(hour >= 12) {
-			hour = Math.floor(hour % 12);	
+			hour = Math.floor(hour % 12);
 			minutes = minutes + " PM";
 		} else {
 			minutes = minutes + " AM";
 		}
-		$('#time').html(hour + ':' + minutes);	
+		$('#time').html(hour + ':' + minutes);
 	});
 }
 
-// Get current and upcoming classes 
+// Get current and upcoming classes
 function getClasses(building) {
   var now = new Date()
     , day = 'Monday'
@@ -466,19 +502,21 @@ function getClasses(building) {
 
   var data = {
     current: mainData.filter(function(el) {
-      return ( 
+      return (
         el.building == building &&
         parseFloat(el.time[0]) <= time &&
         parseFloat(el.time[1]) >= time &&
+        ( (parseFloat(el.time[1]) - parseFloat(el.time[0])) < 1200 ) &&
         el.days.indexOf(day) >= 0
       )
     }).splice(0, 5),
 
     upcoming: mainData.filter(function(el) {
-      return ( 
+      return (
         el.building == building &&
-        parseFloat(el.time[0]) <= hourFuture &&
-        parseFloat(el.time[1]) >= hourFuture &&
+        parseFloat(el.time[0]) <= timeFuture &&
+        parseFloat(el.time[1]) >= timeFuture &&
+        ( (parseFloat(el.time[1]) - parseFloat(el.time[0])) < 1200 ) &&
         el.days.indexOf(day) >= 0
       )
     }).splice(0, 5)
