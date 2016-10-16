@@ -161,7 +161,7 @@ function toggleCircleModal(circle) {
   var upcomingClasses = document.createElement('div');
   $('.modal-body').append('<h1 id="upcomingTitle"> Upcoming Classes </h1>');
   for (i = 0; i < cClasses.upcoming.length; i++) {
-  	$(currentClasses).append('<h2 class="scheduledClass">' + cClasses.upcoming[i].code + ' ' + cClasses.upcoming[i].room + ' @ ' + cClasses.upcoming[i].time[0] + ' to ' + cClasses.upcoming[i].time[1] + '</h2>'); 	
+  	$(upcomingClasses).append('<h2 class="scheduledClass">' + cClasses.upcoming[i].code + ' ' + cClasses.upcoming[i].room + ' @ ' + cClasses.upcoming[i].time[0] + ' to ' + cClasses.upcoming[i].time[1] + '</h2>'); 	
   }
   $('.modal-body').append(upcomingClasses);
 
