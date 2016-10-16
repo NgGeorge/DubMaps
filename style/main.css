@@ -340,6 +340,7 @@ label.btn-upload {
 
 #upcomingEvents {
 	background: rgba(255,255,255,.95);
+	padding-bottom: 10px;
 }
 
 #upcomingEvents .scheduledEvent {
