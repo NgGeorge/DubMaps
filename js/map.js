@@ -49,7 +49,10 @@ function drawCircles(map, circleLayer) {
   for (i = 0; i < buildingLocations.length; i++) {
     var circle = L.circleMarker([buildingLocations[i].lat, buildingLocations[i].long]);
     circle.setRadius(20);
+<<<<<<< HEAD
     circle.on('click', function(){$('#myModal').modal()});
+=======
+>>>>>>> 82cdae7b2360c4a0ae95e982fb02879678e07474
     circle.addTo(circleLayer);
   }
 }
