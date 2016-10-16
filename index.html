@@ -29,7 +29,6 @@
 		<h1 id="title"> DUBMAPS @ <img src="imgs/signature.png" alt="UW Signature" id="UWsignature"> 
 			<button type="button" id="schedule" class="btn btn-secondary" onclick="$('#scheduleView').toggle()" >SCHEDULE</button>
 			<input type="text" id="search" placeholder="Search i.e. 'ENGL 101 AB' or 'Denny Hall'" name="search">
-			<button class="btn btn-secondary btn--populations">POPULATIONS</button>
 		</h1>
 		<div id="map">
 			<div id="scheduleView" style="display: none;">
@@ -44,29 +43,27 @@
 						<label class="btn btn-primary active">
 							<input type="checkbox" checked autocomplete="off"> RSO
 						</label>
+						<button id="populationButton" class="btn btn-secondary btn--populations">CLASS SIZE MAP</button>
 					</div>	
 				</div>
 			</div>
 			<div class="population-controls">
 				<div class="box">
-					<input type="range" min="800" max="2000" step="25" class="time">
+					<input id="slider" type="range" min="800" max="2000" step="25" class="time">
 				</div>
-				<div class="box">
-				  <select class="day">
-				    <option value="Monday">Monday</option>
-				    <option value="Tuesday">Tuesday</option>
-				    <option value="Wednesday">Wednesday</option>
-				    <option value="Thursday">Thursday</option>
-				    <option value="Friday">Friday</option>
-				    <option value="Saturday">Saturday</option>
+
+				<h4 id="time"> 2:00 PM </h4>
+				<div class="weekdays">
+				  <select class="day form-control">
+				    <option value="Monday">MONDAY</option>
+				    <option value="Tuesday">TUESDAY</option>
+				    <option value="Wednesday">WEDNESDAY</option>
+				    <option value="Thursday">THURSDAY</option>
+				    <option value="Friday">FRIDAY</option>
+				    <option value="Saturday">SATURDAY</option>
 				  </select>
 				</div>
 			 </div>
-
-			<!-- Button trigger modal -->
-			<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-			  Launch demo modal
-			</button>
 
 			<!-- Modal -->
 			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
