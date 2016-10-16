@@ -113,7 +113,6 @@ select.day {
 }
 
 #schedule {
-	padding-top: 10px;
 	padding-bottom: 27px;
 }
 
@@ -232,6 +231,7 @@ label.btn-upload {
 	}
 
 	#schedule {
+		margin-top: 20px;
 		margin-right: 200px;
 	}
 
@@ -320,7 +320,6 @@ label.btn-upload {
 
 .file-handler {
 	position: fixed;
-	top: 76px;
 	background: rgba(255, 255, 255, .8);
 	padding: 10px;
 	text-align: center;
