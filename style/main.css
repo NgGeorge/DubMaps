@@ -53,6 +53,19 @@ select.day {
 	border-top: 1px solid #7e7e7e;
 }
 
+
+#eventTitle {
+	border-top: 1px solid #4d4d4d;
+	border-bottom: 1px solid #4d4d4d;
+	background-color: white;
+	font-size: 25px;
+	padding: 15px;
+	padding-top: 100px;
+	margin-bottom: 0;
+	width: 100%;
+	text-align: center;	
+}
+
 #populationButton {
 	border-radius: 5px;
 	display: inline;
@@ -105,6 +118,7 @@ select.day {
 
 #statsButton {
 	border-top: 1px solid #d1d1d1;
+	border-bottom: 1px solid #d1d1d1;
 	border-radius: 5px;
 	display: inline;
 	margin-right: 0;
@@ -174,6 +188,16 @@ select.day {
 
 .ordered-population-chart-container canvas {
 	width: 70%;
+}
+
+
+.scheduledEvent {
+	border-top: 1px solid #7e7e7e;
+	border-bottom: 1px solid #7e7e7e;
+	color: white;
+	background-color: #337ab7;
+	padding: 10px;
+	margin: 0 !important;
 }
 
 @media only screen and (max-width: 500px) {

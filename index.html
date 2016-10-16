@@ -42,7 +42,6 @@
 		<h1 id="title"> DUBMAPS @ <img src="imgs/signature.png" alt="UW Signature" id="UWsignature">
 			<button type="button" id="schedule" class="btn btn-secondary" onclick="$('#scheduleView').toggle()" >SCHEDULE</button>
 			<input type="text" id="search" placeholder="Search i.e. 'ENGL 101 AB' or 'Denny Hall'" name="search">
-			<input type="file" onchange="previewFile()" class="btn--upload" onclick="mark_schedule()">
 		</h1>
 		<div id="map">
 			<!-- Population Chart -->
@@ -64,6 +63,10 @@
 						</label>
 						<button id="populationButton" class="btn btn-secondary btn--populations">CAMPUS POPULATION MAP</button>
 						<button id="statsButton" class="btn btn-secondary" onclick="$('.ordered-population-chart-container').toggle()">CAMPUS TOP 10 BUILDING STATS</button>
+
+			<!--<input type="file" onchange="previewFile()" class="btn--upload" onclick="mark_schedule()"> -->
+			<h2 id="eventTitle"> Upcoming Events </h2>
+			<div id="upcomingEvents"></div>
 					</div>
 				</div>
 			</div>
