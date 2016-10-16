@@ -474,6 +474,31 @@ window.onload = function(e) {
 	});
 }
 
+function mark_schedule() {
+  var circles = [];
+  console.log(schedule);
+  $.each(schedule, function(day, content) {
+    console.log(content); 
+    var courses = content.courses;
+    $.each(courses, function(n, course) {
+      console.log(course);
+    var name = course.name;
+    var place = course.place;
+    var building = place.building;
+    var room = place.room;
+    var major = "";
+    $.each(name, function(i, c) {
+       major += (c + " ");
+    })
+    console.log(building);
+    var circle = findCircle(building);
+    circles.push(circle);  
+    }) 
+    
+  })
+  highlightCircles(circles);
+}
+
 // Get current and upcoming classes
 function getClasses(building) {
   var now = new Date()
