@@ -1,19 +1,30 @@
-L.mapbox.accessToken = 'pk.eyJ1IjoiZ25nY3AiLCJhIjoiY2lsNXd5b3ZrMDA0a3UybHoxY3h5NGN3eiJ9.OrXfMbZ123f3f1EfPRCHHA';
-var southWest = L.latLng(47.647252, -122.324270),
-    northEast = L.latLng(47.661635, -122.288589),
-    bounds = L.latLngBounds(southWest, northEast);
+//var drawMap = function() {
+	L.mapbox.accessToken = 'pk.eyJ1IjoiZ25nY3AiLCJhIjoiY2lsNXd5b3ZrMDA0a3UybHoxY3h5NGN3eiJ9.OrXfMbZ123f3f1EfPRCHHA';
+	var southWest = L.latLng(47.647252, -122.324270),
+	    northEast = L.latLng(47.661635, -122.288589),
+	    bounds = L.latLngBounds(southWest, northEast);
 
-bounds = L.latLngBounds(southWest, northEast);
-var map = L.mapbox.map('map', 'gngcp.p97o5d8j', {
-	maxBounds: bounds,
-  maxZoom: 18,
-  minZoom: 16,
-}).setView([47.653800, -122.307851], 17);
+	bounds = L.latLngBounds(southWest, northEast);
+	var map = L.mapbox.map('map', 'gngcp.p97o5d8j', {
+		maxBounds: bounds,
+	  maxZoom: 18,
+	  minZoom: 16,
+	}).setView([47.653800, -122.307851], 17);
 
-drawOverlayTiles();
+  drawOverlayTiles(map);
 
-var circleLayer = L.featureGroup().addTo(map);
-drawCircles(circleLayer);
+  var circleLayer = L.layerGroup().addTo(map);
+  drawCircles(map, circleLayer);
+
+  // Hides circles so that they don't drift on zoom
+  map.on('zoomstart', function(e) {
+    map.removeLayer(circleLayer);
+  });
+
+  map.on('zoomend', function(e) {
+    map.addLayer(circleLayer);
+  });
+//}
 
 function drawOverlayTiles() {
   var filename = 22873;
@@ -51,7 +62,6 @@ function drawCircles(circleLayer) {
     circle.addTo(circleLayer);
   }
 }
-
 
 // Load shit from button press
 $(function() {
