@@ -5,10 +5,15 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>DubMaps</title>
+
 		<!-- Charting Data -->
 	  <script src="js/data-buildingsStudent.js"></script>
 	  <script src="js/data-buildingsSubjects.js"></script>
+	  <script src="js/data-events.js"></script>
 	  <script src="js/data.js"></script>
+
+    <!-- Building Data -->
+    <script src="js/fullBuildingNames.js"></script>
 
 	  <!-- Chart Libraries -->
 	  <script src="http://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.3/Chart.min.js"></script>
@@ -37,6 +42,7 @@
 		<h1 id="title"> DUBMAPS @ <img src="imgs/signature.png" alt="UW Signature" id="UWsignature">
 			<button type="button" id="schedule" class="btn btn-secondary" onclick="$('#scheduleView').toggle()" >SCHEDULE</button>
 			<input type="text" id="search" placeholder="Search i.e. 'ENGL 101 AB' or 'Denny Hall'" name="search">
+			<input type="file" onchange="previewFile()" class="btn--upload" onclick="mark_schedule()">
 		</h1>
 		<div id="map">
 			<!-- Population Chart -->
@@ -58,7 +64,7 @@
 						</label>
 						<button id="populationButton" class="btn btn-secondary btn--populations">CAMPUS POPULATION MAP</button>
 						<button id="statsButton" class="btn btn-secondary" onclick="$('.ordered-population-chart-container').toggle()">CAMPUS TOP 10 BUILDING STATS</button>
-					</div>	
+					</div>
 				</div>
 			</div>
 			<div class="population-controls">
