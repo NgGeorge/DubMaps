@@ -68,7 +68,7 @@ select.day {
 #eventTitle {
 	border-top: 1px solid #4d4d4d;
 	border-bottom: 1px solid #4d4d4d;
-	background-color: white;
+	background-color: rgba(255,255,255,.95);
 	font-size: 25px;
 	padding: 15px;
 	padding-top: 140px;
@@ -117,7 +117,7 @@ select.day {
 }
 
 #scheduleView {
-	background-color: #737373;
+	background-color: rgba(0,0,0,.2);
 	opacity: 0.9;
 	position: absolute;
 	right: 0;
@@ -337,9 +337,20 @@ label.btn-upload {
 	font-size: 20px;
 }
 
+#upcomingEvents {
+	background: rgba(255,255,255,.95);
+	padding-bottom: 10px;
+}
+
 #upcomingEvents .scheduledEvent {
 	color: #666;
-	background: white;
+	background: none;
 	padding: 10px 20px;
 	border: none;
+}
+
+@media (max-width: 40em) {
+	.modal canvas {
+		display: none;
+	}
 }
