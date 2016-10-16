@@ -297,7 +297,7 @@ label.btn-upload {
 
 .modal-content {
 	max-height: 100%;
-	overflow-y: auto;
+	overflow-y: scroll;
 }
 
 ::-webkit-scrollbar-track
