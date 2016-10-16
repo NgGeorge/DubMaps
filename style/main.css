@@ -7,6 +7,12 @@ html, body {
 	margin: 0;
 	overflow: hidden;
 	padding: 0;
+	line-height: 1.5;
+}
+
+html, body, select, input {
+	font-size: 100%;
+	font-family: 'Open Sans', sans-serif;
 }
 
 /*g {
@@ -151,12 +157,12 @@ button {
 	z-index: 99;
 }
 
-.population-controls input,
-.population-controls select {
+.population-controls .box {
 	width: 45%;
 	display: inline-block;
 }
 
 .population-controls select {
 	padding: 15px;
+	font-size: 16px;
 }
