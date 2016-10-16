@@ -416,3 +416,41 @@ function renderOrderedChart(time) {
 }
 
 renderOrderedChart()
+
+
+// Get current and upcoming classes 
+function getClasses(building) {
+  var now = new Date()
+    , day = 'Monday'
+    , hour = ('00' + now.getHours()).substr(now.getHours().toString().length)
+    , minute = ('00' + now.getMinutes()).substr(now.getMinutes().toString().length)
+    , time = hour + minute
+    , hourFuture = parseFloat(hour)+3
+    , timeFuture = ('00' + hourFuture).substr(hourFuture.toString().length) + minute
+
+  building = building || 'MGH'
+
+  var data = {
+    current: mainData.filter(function(el) {
+      return ( 
+        el.building == building &&
+        parseFloat(el.time[0]) <= time &&
+        parseFloat(el.time[1]) >= time &&
+        el.days.indexOf(day) >= 0
+      )
+    }).splice(0, 5),
+
+    upcoming: mainData.filter(function(el) {
+      return ( 
+        el.building == building &&
+        parseFloat(el.time[0]) <= hourFuture &&
+        parseFloat(el.time[1]) >= hourFuture &&
+        el.days.indexOf(day) >= 0
+      )
+    }).splice(0, 5)
+  }
+
+  return data
+}
+
+console.log(getClasses())
