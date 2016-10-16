@@ -511,4 +511,12 @@ function getClasses(building) {
   return data
 }
 
+function getEvents(building) {
+  building = building || 'MGH'
+  return eventsData.filter(function(event) {
+    return event.location == building
+  })
+}
+
 console.log(getClasses())
+console.log(getEvents())
