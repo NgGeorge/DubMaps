@@ -1,4 +1,4 @@
-var map; 
+var map;
 
 //var drawMap = function() {
 
@@ -20,7 +20,15 @@ var circleLayer = L.layerGroup().addTo(map);
 drawCircles(circleLayer);
 resetCircles();
 
-var populationView = false;
+map.on('zoomstart', function(e) {
+  console.log("Zoom start!");
+  map.removeLayer(circleLayer);
+});
+
+map.on('zoomend', function(e) {
+  console.log("Zoom end!");
+  map.addLayer(circleLayer);
+});
 
 function drawOverlayTiles() {
   var filename = 22873;
@@ -193,6 +201,13 @@ function resetCircles() {
   for(var i = 0; i < circles.length; i++) {
     circles[i].setRadius(20);
     circles[i].options.className = "buildingMark";
+    circles[i].setStyle({
+      fillOpacity: 0,
+    	opacity: 0.5,
+    	color: '#FFD700',
+    	weight: 5
+    	// z-index: '2 !important',
+    });
   }
 }
 
@@ -204,8 +219,8 @@ function highlightCircles(circles) {
   for(var i = 0; i < circles.length; i++) {
     if(circles[i] != null) {
       circles[i].options.className = "highlight";
-      circles[i].setStyle({color: '#ADD8E6', weight: 7, fillOpacity: 0.4});
-      circles[i].setRadius(30);
+      circles[i].setStyle({color: '#EF1AEF', weight: 7, fillOpacity: 0.5});
+      circles[i].setRadius(40);
       lat += circles[i]._latlng.lat;
       lng += circles[i]._latlng.lng;
       total++;
@@ -417,30 +432,44 @@ renderOrderedChart()
 window.onload = function(e) {
 	$('div.population-controls').on('mouseover', function() {
 		map.dragging.disable();
+    map.doubleClickZoom.disable();
+    map.scrollWheelZoom.disable();
 	});
 	$('div.population-controls').on('mouseout', function() {
 		map.dragging.enable();
+    map.doubleClickZoom.enable();
+    map.scrollWheelZoom.enable();
+	});
+  $('div #scheduleView').on('mouseover', function() {
+		map.dragging.disable();
+    map.doubleClickZoom.disable();
+    map.scrollWheelZoom.disable();
+	});
+	$('div #scheduleView').on('mouseout', function() {
+		map.dragging.enable();
+    map.doubleClickZoom.enable();
+    map.scrollWheelZoom.enable();
 	});
 	$('#slider').on('change', function() {
 		var hour = Math.floor($('#slider').val() / 100);
 		var minutes;
 		if($('#slider').val() % 100 >= 60) {
 			hour++;
-			minutes = Math.abs(60 - $('#slider').val()%100);	
+			minutes = Math.abs(60 - $('#slider').val()%100);
 		} else {
 			minutes = $('#slider').val()%100;
-		}	
-		
+		}
+
 		if(minutes == 0) {
 			minutes = "00";
 		}
 		if(hour >= 12) {
-			hour = Math.floor(hour % 12);	
+			hour = Math.floor(hour % 12);
 			minutes = minutes + " PM";
 		} else {
 			minutes = minutes + " AM";
 		}
-		$('#time').html(hour + ':' + minutes);	
+		$('#time').html(hour + ':' + minutes);
 	});
 }
 
