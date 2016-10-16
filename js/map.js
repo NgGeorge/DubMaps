@@ -239,7 +239,7 @@ function highlightCircles(circles) {
       lng += circles[i]._latlng.lng;
       total++;
     } else {
-      console.log("You probably gave me SOCC, which is not a building.");
+      // console.log("You probably gave me SOCC, which is not a building.");
     }
   }
 
@@ -252,7 +252,7 @@ function highlightCircles(circles) {
 // Search function
 $("#search").on('keyup', function (e) {
   if (e.keyCode == 13) {
-    console.log("Enter!");
+    // console.log("Enter!");
     var circles = [];
     var entry = $("#search").val();
     var search = fuse.search(entry).map(function(thing) {
@@ -285,7 +285,7 @@ $("#search").on('keyup', function (e) {
         map.panTo(circles[0]._latlng);
       }
    } else {
-     console.log(entry + " is not a valid building code.");
+     // console.log(entry + " is not a valid building code.");
    }
   }
 });
@@ -508,12 +508,9 @@ window.onload = function(e) {
 
 function mark_schedule(schedule) {
   var circles = [];
-  console.log(schedule);
   $.each(schedule, function(day, content) {
-    console.log(content);
     var courses = content.courses;
     $.each(courses, function(n, course) {
-      console.log(course);
     var name = course.name;
     var place = course.place;
     if ( place ) {
@@ -523,7 +520,6 @@ function mark_schedule(schedule) {
       $.each(name, function(i, c) {
          major += (c + " ");
       })
-      console.log(building);
       var circle = findCircle(building);
       circles.push(circle);  
     }
