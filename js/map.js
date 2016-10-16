@@ -339,7 +339,6 @@ function renderMap() {
 $('.population-controls .time').on('change input', function() {
   time = $(this).val()
   time = time - ( time % 100 ) + Math.round( ( time % 100 ) * 0.6 )
-  console.log(time)
   renderMap()
   renderOrderedChart(time)
 })
@@ -372,8 +371,6 @@ function renderOrderedChart(time) {
   var data = [];
   time = time || 1200;
 
-  console.log('Time:', time)
-
   for ( var buildingName in buildingsStudentData ) {
     if (  !buildingsStudentData.hasOwnProperty(buildingName) ) continue;
     var building = buildingsStudentData[buildingName];
@@ -382,7 +379,6 @@ function renderOrderedChart(time) {
     var current;
     today.forEach(function(section) {
       if ( section.time == time ) {
-        console.log('Time:', time, ' Section time:', section.time)
         current = section;
       }
     })
@@ -496,7 +492,7 @@ function getClasses(building) {
         el.building == building &&
         parseFloat(el.time[0]) <= time &&
         parseFloat(el.time[1]) >= time &&
-        ( parseFloat(el.time[1]) - parseFloat(el.time[0]) < 12 ) &&
+        ( (parseFloat(el.time[1]) - parseFloat(el.time[0])) < 1200 ) &&
         el.days.indexOf(day) >= 0
       )
     }).splice(0, 5),
@@ -504,8 +500,9 @@ function getClasses(building) {
     upcoming: mainData.filter(function(el) {
       return (
         el.building == building &&
-        parseFloat(el.time[0]) <= hourFuture &&
-        parseFloat(el.time[1]) >= hourFuture &&
+        parseFloat(el.time[0]) <= timeFuture &&
+        parseFloat(el.time[1]) >= timeFuture &&
+        ( (parseFloat(el.time[1]) - parseFloat(el.time[0])) < 1200 ) &&
         el.days.indexOf(day) >= 0
       )
     }).splice(0, 5)
