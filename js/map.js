@@ -311,7 +311,7 @@ $(function() {
 var time
   , day
   , chart = {}
-  , colors = ["#ffffcc","#ffeda0","#fed976","#feb24c","#fd8d3c","#fc4e2a","#e31a1c","#bd0026","#800026"]
+  , colors = ["#fff7f3","#fde0dd","#fcc5c0","#fa9fb5","#f768a1","#dd3497","#ae017e","#7a0177","#49006a"]
   , colorsLen = colors.length
   , populationLayer
 
