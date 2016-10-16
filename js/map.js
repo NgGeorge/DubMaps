@@ -59,21 +59,37 @@ function drawOverlayTiles() {
 function drawCircles(circleLayer) {
   for (i = 0; i < buildingLocations.length; i++) {
     var circle = L.circleMarker([buildingLocations[i].lat, buildingLocations[i].long]);
-    var name = buildingLocations[i].name;
+    var title = "<p>" + buildingLocations[i].name + "</p>";
+    var body = "<p>example</p>";
+    var content = "title: [" + title + "]\nbody: [" + body + "]";
     circle.setRadius(20);
-    circle.bindPopup(name);
+    circle.bindPopup(content);
     circle.on('click', function(){
       $('#myModal').modal();
       $('.modal-title').empty();
-      console.log(this._popup._content);
-      $("<p>" + this._popup._content + "</p>").appendTo('.modal-title');
+      $('.modal-body').empty();
+      var myContent = this._popup._content;
+      var myTitle = getCircleTitle(this);
+      var myBody = getCircleBody(this);
+      $(myTitle).appendTo('.modal-title');
+      $(myBody).appendTo('.modal-body');
     });
 
     circle.addTo(circleLayer);
   }
 }
 
+function getCircleTitle(circle) {
+  var myContent = circle._popup._content;
+  var myTitle = /title: \[(.*?)\]/.exec(myContent)[1];
+  return myTitle;
+}
 
+function getCircleBody(circle) {
+  var myContent = circle._popup._content;
+  var myBody = /body: \[(.*?)\]/.exec(myContent)[1];
+  return myBody;
+}
 
 // Load shit from button press
 $(function() {
