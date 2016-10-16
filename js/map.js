@@ -1,4 +1,7 @@
+var map; 
+
 //var drawMap = function() {
+
 L.mapbox.accessToken = 'pk.eyJ1IjoiZ25nY3AiLCJhIjoiY2lsNXd5b3ZrMDA0a3UybHoxY3h5NGN3eiJ9.OrXfMbZ123f3f1EfPRCHHA';
 var southWest = L.latLng(47.647252, -122.324270),
     northEast = L.latLng(47.661635, -122.288589),
@@ -18,17 +21,6 @@ drawCircles(circleLayer);
 resetCircles();
 
 var populationView = false;
-// Hides circles so that they don't drift on zoom
-map.on('zoomstart', function(e) {
-  console.log("Zoom start!");
-  map.removeLayer(circleLayer);
-});
-
-map.on('zoomend', function(e) {
-  console.log("Zoom end!");
-  map.addLayer(circleLayer);
-});
-//}
 
 function drawOverlayTiles() {
   var filename = 22873;
@@ -124,6 +116,7 @@ function drawCircles(circleLayer) {
     var content = "title: [" + title + "]\nbody: [" + body + "]";
     circle.setRadius(20);
     circle.bindPopup(content);
+    circle.options.className = 'buildingMark';
     circle.on('click', function(){
       map.panTo(this._latlng);
       resetCircles();
@@ -198,8 +191,8 @@ var fuse = new Fuse(mainData, {
 function resetCircles() {
   var circles = circleLayer.getLayers();
   for(var i = 0; i < circles.length; i++) {
-    circles[i].setStyle({color: '#3388ff', weight: 3, fillOpacity: 0.2});
     circles[i].setRadius(20);
+    circles[i].options.className = "buildingMark";
   }
 }
 
@@ -210,9 +203,9 @@ function highlightCircles(circles) {
 
   for(var i = 0; i < circles.length; i++) {
     if(circles[i] != null) {
-      circles[i].setStyle({color: '#EDED11', weight: 7, fillOpacity: 0.4});
+      circles[i].options.className = "highlight";
+      circles[i].setStyle({color: '#ADD8E6', weight: 7, fillOpacity: 0.4});
       circles[i].setRadius(30);
-      //console.log(circles[i]);
       lat += circles[i]._latlng.lat;
       lng += circles[i]._latlng.lng;
       total++;
@@ -296,7 +289,7 @@ var time
 function renderMap() {
   $('.map').html('')
   day = day || 'Monday'
-  time = time || 800
+  time = time || 1400
 
   $.each(buildingsStudentData, function(buildingName, building) {
     var sections = building[day]
@@ -308,13 +301,13 @@ function renderMap() {
   })
 
   var maxStudents = Math.max.apply(Math, $.map(chart, function(info) {
-    return info.n
+    return info.n;
   }))
-  maxStudents++
-  var maxStudentsLog = Math.log(maxStudents)
+  maxStudents++;
+  var maxStudentsLog = Math.log(maxStudents);
 
   $.each(chart, function(name, info) {
-    chart[name].color = colors[Math.floor(Math.log(info.n)/maxStudentsLog*colorsLen)]
+    chart[name].color = colors[Math.floor(Math.log(info.n)/maxStudentsLog*colorsLen)];
   })
 
   var circles = circleLayer.getLayers();
@@ -324,6 +317,7 @@ function renderMap() {
     var name = getCircleTitle(circles[i]);
     circles[i].setRadius(Math.log(chart[name].n)/maxStudentsLog * 100);
     circles[i].setStyle({color: chart[name].color, fillOpacity: .75});
+    circles[i].options.className = "popMark";
   }
 }
 
@@ -337,6 +331,7 @@ $('.population-controls .day').on('change', function() {
   day = $(this).val()
   renderMap()
 })
+
 
 function getColor (i) {
   i = i || 0
@@ -419,6 +414,35 @@ function renderOrderedChart(time) {
 
 renderOrderedChart()
 
+window.onload = function(e) {
+	$('div.population-controls').on('mouseover', function() {
+		map.dragging.disable();
+	});
+	$('div.population-controls').on('mouseout', function() {
+		map.dragging.enable();
+	});
+	$('#slider').on('change', function() {
+		var hour = Math.floor($('#slider').val() / 100);
+		var minutes;
+		if($('#slider').val() % 100 >= 60) {
+			hour++;
+			minutes = Math.abs(60 - $('#slider').val()%100);	
+		} else {
+			minutes = $('#slider').val()%100;
+		}	
+		
+		if(minutes == 0) {
+			minutes = "00";
+		}
+		if(hour >= 12) {
+			hour = Math.floor(hour % 12);	
+			minutes = minutes + " PM";
+		} else {
+			minutes = minutes + " AM";
+		}
+		$('#time').html(hour + ':' + minutes);	
+	});
+}
 
 // Get current and upcoming classes
 function getClasses(building) {

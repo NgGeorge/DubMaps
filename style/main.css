@@ -15,22 +15,48 @@ html, body, select, input {
 	font-family: 'Open Sans', sans-serif;
 }
 
-/*g {
-	z-index: 2 !important;
+button {
+	background-color: white;
+	color: #737373;
+	letter-spacing: 2px;
+	height: 30px;
+	margin-right: 20px;
+	line-height: 0;
+	padding: 0;
 }
 
-g path {
+div.weekdays, .weekdays select {
+	display: inline;
+}
+
+select.day {
+	letter-spacing: 2px;
+	width: 150px;
+}
+
+.buildingMark {
 	fill-opacity: 0;
 	stroke-opacity: 0.5;
 	stroke: #FFD700;
 	stroke-width: 5;
 	z-index: 2 !important;
 	transition: all .3s ease;
-}*/
+}
 
-g path:hover {
+.buildingMark:hover {
 	stroke-opacity: .8;
 	stroke-width: 10;
+}
+
+#populationButton {
+	border-radius: 5px;
+	display: inline;
+	margin-right: 0;
+	width: 100%;	
+}
+
+#populationButton:hover {
+	background-color: #d1d1d1;
 }
 
 #map {
@@ -57,14 +83,9 @@ g path:hover {
 	outline: none;
 }
 
-button {
-	background-color: white;
-	color: #737373;
-	letter-spacing: 2px;
-	height: 30px;
-	margin-right: 20px;
-	line-height: 0;
-	padding: 0;
+#schedule {
+	padding-top: 10px;
+	padding-bottom: 27px;
 }
 
 #scheduleView {
@@ -75,6 +96,29 @@ button {
 	height: 100%;
 	width: 399px;
 	z-index: 2;
+}
+
+#statsButton {
+	border-top: 1px solid #d1d1d1;
+	border-radius: 5px;
+	display: inline;
+	margin-right: 0;
+	width: 100%;	
+}
+
+#statsButton:hover {
+	background-color: #d1d1d1;
+}
+
+#time {
+	border: 1px solid #d3d3d3;
+	border-radius: 5px;
+	padding: 4px;
+	padding-left: 20px;
+	padding-right: 20px;
+	display: inline;
+	margin-right: 20px;
+	margin-left: 20px;
 }
 
 #title {
@@ -101,21 +145,31 @@ button {
 .btn.btn-primary {
 	border-radius: 0;
 	letter-spacing: 2px;
-	width: 33.5%;
+	width: 33.45%;		
 }
 
 .leaflet-bottom.leaflet-right {
 	z-index: 1;
 }
 
-.leaflet-image-layer {
-	z-index: 1 !important;
-}
-
 .leaflet-popup {
   display: none !important;
 }
 
+.leaflet-image-layer {
+	z-index: 1 !important;
+}
+
+.ordered-population-chart-container {
+	background-color: white;
+	position: absolute;
+	width: 100%;
+	z-index: 2;
+}
+
+.ordered-population-chart-container canvas {
+	width: 70%;
+}
 
 @media only screen and (max-width: 500px) {
 	#search {
@@ -141,6 +195,10 @@ button {
 	.leaflet-top, .leaflet-bottom {
 		z-index: 1;
 	}
+
+	.weekdays select{
+		margin-top: 20px;
+	}
 }
 
 
@@ -152,7 +210,7 @@ button {
 	bottom: -100%;
 	left: 0;
 	right: 0;
-	padding: 60px;
+	padding: 10px;
 	text-align: center;
 	z-index: 99;
 }
@@ -164,7 +222,6 @@ button {
 
 .population-controls select {
 	padding: 15px;
-	font-size: 16px;
 }
 
 .modal {
