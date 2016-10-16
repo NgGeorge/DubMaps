@@ -142,9 +142,9 @@ function toggleCircleModal(circle) {
   var ctx1 = document.createElement('canvas');
   var ctx2 = document.createElement('canvas');
   $('.modal-body').append(ctx1);
-  getStudentChart(buildingName, ctx1)
+  getStudentChart(myTitle, ctx1)
   $('.modal-body').append(ctx2);
-  getSubjectChart(buildingName, ctx2);
+  getSubjectChart(myTitle, ctx2);
 }
 
 function getCircleTitle(circle) {
