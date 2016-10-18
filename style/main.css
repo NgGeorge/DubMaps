@@ -254,6 +254,10 @@ label.btn-upload {
 	.weekdays select{
 		margin-top: 20px;
 	}
+
+	.file-handler input {
+		margin-left: 20%;
+	}
 }
 
 
@@ -333,7 +337,13 @@ label.btn-upload {
 }
 
 .file-handler input {
-	margin: 0 auto;
+	display: inline;
+	vertical-align: top;
+}
+
+.file-handler h3 {
+	display: inline;
+	margin-right: 15px;
 }
 
 #eventTitle {
@@ -357,4 +367,29 @@ label.btn-upload {
 	.modal canvas {
 		display: none;
 	}
+}
+
+/* Adjusting map size due to header */
+@media (max-width: 1309px) {
+#map {
+	height: calc(100% - 118px);
+}
+}
+
+@media (max-width: 768px) {
+#map {
+	height: calc(100% - 162px);
+}
+}
+
+@media (max-width: 557px) {
+#map {
+	height: calc(100% - 206px);
+}
+}
+
+@media (max-width: 500px) {
+#map {
+	height: calc(100% - 173px);
+}
 }
